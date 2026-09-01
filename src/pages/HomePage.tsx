@@ -143,14 +143,14 @@ export const HomePage: React.FC = () => {
               initial={{ opacity: 0, scale: 0.94, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              className="lg:col-span-5"
+              className="lg:col-span-5 flex items-center justify-center"
             >
-              <div className="relative bg-white rounded-3xl p-3.5 shadow-2xl border border-[#EFE8DF] overflow-hidden group">
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[#F5EFE8]">
+              <div className="relative w-full bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-[#EFE8DF] overflow-hidden group flex items-center justify-center">
+                <div className="w-full aspect-[4/3] flex items-center justify-center bg-[#FFFBF7] rounded-2xl p-4 overflow-hidden border border-[#EFE8DF]/60">
                   <img
                     src={COMPANY_INFO.heroImage}
-                    alt="Sameer Commercial Trailer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Sameer Commercial Trailer — Engineered Heavy Transport"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 drop-shadow-xl"
                   />
                 </div>
               </div>

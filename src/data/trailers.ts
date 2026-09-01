@@ -299,5 +299,5 @@ export const COMPANY_INFO = {
   email: 'info@sameertrailer.in',
   address: '8JGM+2HJ, near FCI GODOWN, Kawa Kheda, AMBEDKAR COLONY, Bhilwara, Rajasthan 311001',
   logo: '/assets/extracted/img_1.png',
-  heroImage: '/assets/extracted/img_2.webp'
+  heroImage: '/assets/hero-trailer.png'
 };

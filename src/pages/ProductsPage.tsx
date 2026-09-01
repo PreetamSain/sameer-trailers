@@ -55,32 +55,35 @@ export const ProductsPage: React.FC = () => {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-2xl hover:border-[#F68722]/40 transition-all duration-300 p-6 sm:p-8"
+              className="bg-white rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-2xl hover:border-[#F68722]/40 transition-all duration-300 p-6 sm:p-8 group"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 
-                {/* Left Image */}
-                <div className="lg:col-span-5 aspect-[16/11] rounded-2xl overflow-hidden bg-[#F5EFE8] group">
+                {/* Left Image (Clickable Link) */}
+                <Link
+                  to={`/products/${product.slug}`}
+                  className="lg:col-span-5 aspect-[16/11] rounded-2xl overflow-hidden bg-[#F5EFE8] block cursor-pointer"
+                >
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                </div>
+                </Link>
 
                 {/* Right Details */}
                 <div className="lg:col-span-7 space-y-5">
-                  <div>
+                  <Link to={`/products/${product.slug}`} className="block cursor-pointer space-y-1">
                     <span className="text-xs font-bold text-[#F68722] uppercase font-mono-specs">
                       {product.categoryTitle}
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-black text-[#3B3A3A] font-heading mt-0.5">
+                    <h2 className="text-2xl sm:text-3xl font-black text-[#3B3A3A] font-heading mt-0.5 group-hover:text-[#F68722] transition-colors">
                       {product.name}
                     </h2>
                     <p className="text-xs sm:text-sm text-[#736F6A] mt-2 leading-relaxed">
                       {product.fullDesc}
                     </p>
-                  </div>
+                  </Link>
 
                   {/* Key Highlights Checklist */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -106,15 +109,15 @@ export const ProductsPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[#EFE8DF]">
                     <Link
                       to={`/products/${product.slug}`}
-                      className="py-3 px-6 bg-[#3B3A3A] hover:bg-[#202020] text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center gap-2 transition-colors"
+                      className="py-3 px-6 bg-[#3B3A3A] hover:bg-[#202020] text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
                     >
                       <span>Full Technical Specifications</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
 
                     <Link
-                      to="/contact"
-                      className="py-3 px-5 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center gap-1.5 shadow-md shadow-[#F68722]/20 transition-all"
+                      to={`/contact?model=${product.slug}`}
+                      className="py-3 px-5 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center gap-1.5 shadow-md shadow-[#F68722]/20 transition-all cursor-pointer"
                     >
                       <span>Get Custom Quote</span>
                     </Link>

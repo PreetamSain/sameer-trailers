@@ -39,7 +39,14 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-between h-full">
             
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              to="/"
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
               <img
                 src={COMPANY_INFO.logo}
                 alt="Sameer Trailers"

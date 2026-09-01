@@ -30,7 +30,6 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
-import { TipperElevationShowcase } from '../components/TipperElevationShowcase';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -226,9 +225,6 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
-
-      {/* 2.5. 3-STAGE HYDRAULIC TIPPING ANIMATION SHOWCASE */}
-      <TipperElevationShowcase />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

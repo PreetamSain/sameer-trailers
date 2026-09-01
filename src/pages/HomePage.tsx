@@ -158,10 +158,10 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: "100px" }}
+            transition={{ duration: 0.4 }}
             className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#EFE8DF] pb-4"
           >
             <div>
@@ -181,15 +181,16 @@ export const HomePage: React.FC = () => {
             </Link>
           </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {PRODUCTS_LIST.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
+          {/* Cards Reveal Immediately without blank waiting */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PRODUCTS_LIST.map((product, idx) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "120px" }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+              >
                 <Link
                   to={`/products/${product.slug}`}
                   className="bg-white rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-2xl hover:border-[#F68722]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group h-full justify-between"
@@ -199,7 +200,6 @@ export const HomePage: React.FC = () => {
                       src={product.image}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
                     />
                   </div>
 
@@ -221,7 +221,7 @@ export const HomePage: React.FC = () => {
                 </Link>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </section>
@@ -231,10 +231,10 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: "100px" }}
+            transition={{ duration: 0.4 }}
             className="text-center max-w-2xl mx-auto space-y-2"
           >
             <span className="text-xs font-bold text-[#F68722] uppercase tracking-wider font-mono-specs">
@@ -248,14 +248,14 @@ export const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            <motion.div variants={itemVariants} className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "100px" }}
+              transition={{ duration: 0.4, delay: 0.05 }}
+              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
                 <ShieldCheck className="w-6 h-6" />
               </div>
@@ -268,7 +268,13 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "100px" }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
                 <Scale className="w-6 h-6" />
               </div>
@@ -281,7 +287,13 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "100px" }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
                 <Flame className="w-6 h-6" />
               </div>
@@ -294,7 +306,13 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "100px" }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
                 <Sparkles className="w-6 h-6" />
               </div>
@@ -306,7 +324,7 @@ export const HomePage: React.FC = () => {
                 </p>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
 
         </div>
       </section>
@@ -317,10 +335,10 @@ export const HomePage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, margin: "100px" }}
+            transition={{ duration: 0.5 }}
             className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
           >
             <div className="md:col-span-8 space-y-3">
@@ -359,10 +377,10 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: "100px" }}
+            transition={{ duration: 0.4 }}
             className="text-center max-w-2xl mx-auto space-y-2"
           >
             <span className="text-xs font-bold text-[#F68722] uppercase tracking-wider font-mono-specs">
@@ -376,17 +394,14 @@ export const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {INDUSTRY_SECTORS.map((sec, idx) => (
               <motion.div
                 key={idx}
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "100px" }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
                 className="bg-white p-6 rounded-3xl border border-[#EFE8DF] shadow-sm hover:shadow-xl hover:border-[#F68722]/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
@@ -406,7 +421,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </section>
@@ -416,10 +431,10 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: "100px" }}
+            transition={{ duration: 0.4 }}
             className="text-center max-w-2xl mx-auto space-y-2"
           >
             <span className="text-xs font-bold text-[#F68722] uppercase tracking-wider font-mono-specs">
@@ -433,17 +448,14 @@ export const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {QUALITY_POINTS.map((point, idx) => (
               <motion.div
                 key={idx}
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "100px" }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
                 className="bg-[#FFFBF7] rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="aspect-[16/10] bg-[#F5EFE8] overflow-hidden">
@@ -451,7 +463,6 @@ export const HomePage: React.FC = () => {
                     src={point.image}
                     alt={point.title}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
                   />
                 </div>
 
@@ -465,7 +476,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </section>

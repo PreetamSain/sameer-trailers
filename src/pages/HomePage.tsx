@@ -60,7 +60,7 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFBF7] overflow-hidden">
+    <div className="min-h-screen bg-[#FFFBF7]">
       
       {/* 1. HERO SECTION WITH SUBTLE PARTICLES */}
       <section className="relative pt-8 pb-16 md:pt-16 md:pb-24 overflow-hidden border-b border-[#EFE8DF]">

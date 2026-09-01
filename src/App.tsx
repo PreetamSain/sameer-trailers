@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Lenis from 'lenis';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
@@ -50,9 +49,6 @@ export function App() {
       <div className="flex flex-col min-h-screen bg-[#FFFBF7] text-[#3B3A3A]">
         {/* Clean Sticky Header */}
         <Header />
-
-        {/* Minimal Interactive Scroll Highway Progress Bar */}
-        <ScrollProgressBar />
 
         {/* Main Content */}
         <main className="flex-1">

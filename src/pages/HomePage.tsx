@@ -30,6 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
+import { InteractiveVehicleInspector } from '../components/InteractiveVehicleInspector';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -92,7 +93,7 @@ export const HomePage: React.FC = () => {
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Link
                   to="/products"
-                  className="py-3.5 px-8 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-[#F68722]/25 hover:shadow-xl hover:shadow-[#F68722]/35 active:scale-95 transition-all group"
+                  className="py-3.5 px-8 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-[#F68722]/25 hover:shadow-xl hover:shadow-[#F68722]/35 active:scale-95 transition-all group cursor-pointer"
                 >
                   <span>Explore Products</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -100,7 +101,7 @@ export const HomePage: React.FC = () => {
 
                 <Link
                   to="/contact"
-                  className="py-3.5 px-8 bg-[#3B3A3A] hover:bg-[#222222] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-sm active:scale-95 transition-all"
+                  className="py-3.5 px-8 bg-[#3B3A3A] hover:bg-[#222222] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-sm active:scale-95 transition-all cursor-pointer"
                 >
                   <span>Request Quote</span>
                 </Link>
@@ -153,6 +154,23 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* 1.5. PRECISION EDITORIAL ENGINEERING MARQUEE (Heron AI Inspired) */}
+      <div className="bg-[#3B3A3A] text-white py-3 overflow-hidden border-y border-white/10 select-none">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex items-center gap-8 mx-4 text-xs font-mono-specs font-bold tracking-widest uppercase">
+              <span className="text-[#F68722]">● 700 MPa DOMEX STEEL</span>
+              <span className="text-white/80">AUTOMATED SAW BEAMS</span>
+              <span className="text-[#F68722]">● 1.8T PAYLOAD ADVANTAGE</span>
+              <span className="text-white/80">ARAI AIS-113 CERTIFIED</span>
+              <span className="text-[#F68722]">● SA 2.5 SHOT BLASTED</span>
+              <span className="text-white/80">2K POLYURETHANE COATING</span>
+              <span className="text-[#F68722]">● 100% CMVR APPROVED</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* 2. FEATURED PRODUCTS ("WHAT WE BUILD") */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -174,7 +192,7 @@ export const HomePage: React.FC = () => {
             </div>
             <Link
               to="/products"
-              className="text-xs font-bold text-[#F68722] hover:text-[#e07414] flex items-center gap-1 transition-colors group"
+              className="text-xs font-bold text-[#F68722] hover:text-[#e07414] flex items-center gap-1 transition-colors group cursor-pointer"
             >
               <span>View All Categories</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -193,7 +211,7 @@ export const HomePage: React.FC = () => {
               >
                 <Link
                   to={`/products/${product.slug}`}
-                  className="bg-white rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-2xl hover:border-[#F68722]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group h-full justify-between"
+                  className="bg-white rounded-3xl border border-[#EFE8DF] overflow-hidden shadow-sm hover:shadow-2xl hover:border-[#F68722]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group h-full justify-between cursor-pointer"
                 >
                   <div className="aspect-[16/11] bg-[#F5EFE8] overflow-hidden">
                     <img
@@ -225,6 +243,9 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
+
+      {/* 2.5. HERON AI STYLE INTERACTIVE VEHICLE ANATOMY BLUEPRINT INSPECTOR */}
+      <InteractiveVehicleInspector />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

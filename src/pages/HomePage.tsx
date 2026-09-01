@@ -30,6 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
+import { ScrollTrailerStory } from '../components/ScrollTrailerStory';
 import { InteractiveVehicleInspector } from '../components/InteractiveVehicleInspector';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -154,23 +155,6 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 1.5. PRECISION EDITORIAL ENGINEERING MARQUEE (Heron AI Inspired) */}
-      <div className="bg-[#3B3A3A] text-white py-3 overflow-hidden border-y border-white/10 select-none">
-        <div className="flex whitespace-nowrap animate-marquee">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="flex items-center gap-8 mx-4 text-xs font-mono-specs font-bold tracking-widest uppercase">
-              <span className="text-[#F68722]">● 700 MPa DOMEX STEEL</span>
-              <span className="text-white/80">AUTOMATED SAW BEAMS</span>
-              <span className="text-[#F68722]">● 1.8T PAYLOAD ADVANTAGE</span>
-              <span className="text-white/80">ARAI AIS-113 CERTIFIED</span>
-              <span className="text-[#F68722]">● SA 2.5 SHOT BLASTED</span>
-              <span className="text-white/80">2K POLYURETHANE COATING</span>
-              <span className="text-[#F68722]">● 100% CMVR APPROVED</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* 2. FEATURED PRODUCTS ("WHAT WE BUILD") */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -244,8 +228,8 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2.5. HERON AI STYLE INTERACTIVE VEHICLE ANATOMY BLUEPRINT INSPECTOR */}
-      <InteractiveVehicleInspector />
+      {/* 2.5. PINNED SCROLL-DRIVEN TRAILER SHOWCASE (Radian & Cula Inspired) */}
+      <ScrollTrailerStory />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

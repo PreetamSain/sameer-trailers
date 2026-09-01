@@ -145,14 +145,12 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="lg:col-span-5 flex items-center justify-center"
             >
-              <div className="relative w-full bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-[#EFE8DF] overflow-hidden group flex items-center justify-center">
-                <div className="w-full aspect-[4/3] flex items-center justify-center bg-[#FFFBF7] rounded-2xl p-4 overflow-hidden border border-[#EFE8DF]/60">
-                  <img
-                    src={COMPANY_INFO.heroImage}
-                    alt="Sameer Commercial Trailer — Engineered Heavy Transport"
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 drop-shadow-xl"
-                  />
-                </div>
+              <div className="relative w-full flex items-center justify-center">
+                <img
+                  src={COMPANY_INFO.heroImage}
+                  alt="Sameer Commercial Trailer — Engineered Heavy Transport"
+                  className="w-full h-auto max-h-[400px] sm:max-h-[460px] object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)] hover:scale-[1.03] transition-transform duration-500"
+                />
               </div>
             </motion.div>
 

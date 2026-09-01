@@ -138,19 +138,25 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Right Hero Image */}
+            {/* Right Hero Image (Brochure Offset Accent Frame Design) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              className="lg:col-span-5 flex items-center justify-center"
+              className="lg:col-span-5 flex items-center justify-center p-2 sm:p-4"
             >
-              <div className="relative w-full bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-[#EFE8DF] overflow-hidden group flex items-center justify-center">
-                <img
-                  src={COMPANY_INFO.heroImage}
-                  alt="Sameer Commercial Trailer — Engineered Heavy Transport"
-                  className="w-full h-auto max-h-[380px] sm:max-h-[440px] object-contain group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
-                />
+              <div className="relative w-full group cursor-pointer">
+                {/* 1. Offset Brand Orange (#F68722) Backdrop Frame from Brochure */}
+                <div className="absolute inset-0 bg-[#F68722] rounded-3xl translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300 -z-10" />
+
+                {/* 2. Main Foreground Image Container with matching rounded corners */}
+                <div className="relative w-full bg-white rounded-3xl p-5 sm:p-7 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center">
+                  <img
+                    src={COMPANY_INFO.heroImage}
+                    alt="Sameer Commercial Trailer — Engineered Heavy Transport"
+                    className="w-full h-auto max-h-[380px] sm:max-h-[440px] object-contain rounded-2xl group-hover:scale-[1.03] transition-transform duration-500"
+                  />
+                </div>
               </div>
             </motion.div>
 

@@ -1,27 +1,31 @@
 const sharp = require('sharp');
 const path = require('path');
 
-async function generateCleanOG() {
+async function generatePerfectSafeOG() {
   const logoPath = path.join(__dirname, 'public', 'assets', 'extracted', 'img_1.png');
   const metadata = await sharp(logoPath).metadata();
   console.log('Original Logo:', metadata.width, 'x', metadata.height);
 
-  // 1. 1200x630 High-Resolution OG Image with ONLY the Logo, perfectly centered, NO extra text
+  // Canvas size for OpenGraph
   const ogWidth = 1200;
   const ogHeight = 630;
-  
-  // Resize logo crisply to 850px width (large, sharp, clear, lanczos3 kernel)
+
+  // WhatsApp square crop window is 630x630 in the exact center (x from 285 to 915).
+  // Therefore, the maximum logo width must be <= 520px so it never gets clipped in square view!
+  const targetLogoWidth = 520;
+
   const logoOgBuffer = await sharp(logoPath)
     .resize({
-      width: 860,
+      width: targetLogoWidth,
       fit: 'inside',
       kernel: sharp.kernel.lanczos3,
     })
     .toBuffer();
 
   const resizedOgMeta = await sharp(logoOgBuffer).metadata();
+  console.log('Resized Logo Dimensions:', resizedOgMeta.width, 'x', resizedOgMeta.height);
 
-  // Create clean solid background (Pure White / #FFFBF7 for highest contrast)
+  // Background Canvas (#FFFBF7)
   const bgSvg = `
     <svg width="${ogWidth}" height="${ogHeight}" viewBox="0 0 ${ogWidth} ${ogHeight}" xmlns="http://www.w3.org/2000/svg">
       <rect width="${ogWidth}" height="${ogHeight}" fill="#FFFBF7"/>
@@ -39,13 +43,12 @@ async function generateCleanOG() {
     .png({ quality: 100, compressionLevel: 9 })
     .toFile(path.join(__dirname, 'public', 'og-image.png'));
 
-  console.log('Generated public/og-image.png (1200x630 - Sharp & Centered, No text)');
+  console.log('Generated public/og-image.png (1200x630 with 520px safe center logo)');
 
-  // 2. 600x600 Square High-Res Logo for WhatsApp Square Preview
-  const squareSize = 600;
+  // Also 512x512 square icon with 440px logo width
   const squareLogoBuffer = await sharp(logoPath)
     .resize({
-      width: 520,
+      width: 440,
       fit: 'inside',
       kernel: sharp.kernel.lanczos3,
     })
@@ -54,8 +57,8 @@ async function generateCleanOG() {
   const squareMeta = await sharp(squareLogoBuffer).metadata();
 
   const squareBgSvg = `
-    <svg width="${squareSize}" height="${squareSize}" viewBox="0 0 ${squareSize} ${squareSize}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="${squareSize}" height="${squareSize}" fill="#FFFBF7"/>
+    <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <rect width="512" height="512" fill="#FFFBF7"/>
     </svg>
   `;
 
@@ -63,22 +66,14 @@ async function generateCleanOG() {
     .composite([
       {
         input: squareLogoBuffer,
-        top: Math.round((squareSize - squareMeta.height) / 2),
-        left: Math.round((squareSize - squareMeta.width) / 2),
+        top: Math.round((512 - squareMeta.height) / 2),
+        left: Math.round((512 - squareMeta.width) / 2),
       },
     ])
     .png({ quality: 100, compressionLevel: 9 })
     .toFile(path.join(__dirname, 'public', 'logo.png'));
 
-  console.log('Generated public/logo.png (600x600 - Sharp & Centered)');
-
-  // 3. Apple touch icon 180x180
-  await sharp(path.join(__dirname, 'public', 'logo.png'))
-    .resize(180, 180, { kernel: sharp.kernel.lanczos3 })
-    .png({ quality: 100 })
-    .toFile(path.join(__dirname, 'public', 'apple-touch-icon.png'));
-
-  console.log('Generated public/apple-touch-icon.png');
+  console.log('Generated public/logo.png (512x512 with safe padding)');
 }
 
-generateCleanOG().catch(console.error);
+generatePerfectSafeOG().catch(console.error);

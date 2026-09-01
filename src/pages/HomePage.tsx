@@ -73,7 +73,7 @@ export const HomePage: React.FC = () => {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-7 space-y-6"
+              className="lg:col-span-6 space-y-6"
             >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F68722]/10 border border-[#F68722]/25 text-[#F68722] text-xs font-black uppercase tracking-wider font-mono-specs shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 animate-pulse text-[#F68722]" />
@@ -138,23 +138,23 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Right Hero Image (Brochure Offset Accent Frame Design) */}
+            {/* Right Hero Image (Brochure Offset Accent Frame Design - Scaled Up & Minimal Margins) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              className="lg:col-span-5 flex items-center justify-center p-2 sm:p-4"
+              className="lg:col-span-6 flex items-center justify-center p-1 sm:p-2"
             >
               <div className="relative w-full group cursor-pointer">
                 {/* 1. Offset Brand Orange (#F68722) Backdrop Frame from Brochure */}
                 <div className="absolute inset-0 bg-[#F68722] rounded-3xl translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300 -z-10" />
 
-                {/* 2. Main Foreground Image Container with matching rounded corners */}
-                <div className="relative w-full bg-white rounded-3xl p-5 sm:p-7 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center">
+                {/* 2. Main Foreground Image Container with minimal padding and scaled up trailer */}
+                <div className="relative w-full bg-white rounded-3xl p-2 sm:p-3 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center min-h-[340px] sm:min-h-[420px]">
                   <img
                     src={COMPANY_INFO.heroImage}
                     alt="Sameer Commercial Trailer — Engineered Heavy Transport"
-                    className="w-full h-auto max-h-[380px] sm:max-h-[440px] object-contain rounded-2xl group-hover:scale-[1.03] transition-transform duration-500"
+                    className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain rounded-2xl scale-[1.06] sm:scale-[1.10] group-hover:scale-[1.14] transition-transform duration-500"
                   />
                 </div>
               </div>

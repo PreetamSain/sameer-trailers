@@ -11,7 +11,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   end,
   suffix = '',
   prefix = '',
-  duration = 2000,
+  duration = 1000,
 }) => {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -25,7 +25,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     if (ref.current) {
@@ -45,9 +45,9 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       
-      // Easing: easeOutExpo
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setCount(Math.floor(easeProgress * end));
+      // Easing: Smooth easeOutCubic (snappy, energetic, no agonizing deceleration at the end)
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(easeProgress * end));
 
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animate);

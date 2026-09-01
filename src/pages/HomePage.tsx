@@ -75,9 +75,8 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-6 space-y-6"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F68722]/10 border border-[#F68722]/25 text-[#F68722] text-xs font-black uppercase tracking-wider font-mono-specs shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 animate-pulse text-[#F68722]" />
-                <span>MADE IN INDIA • ARAI AIS-113 CERTIFIED</span>
+              <div className="text-xs sm:text-sm font-black text-[#3B3A3A] tracking-[0.25em] uppercase font-heading">
+                MADE IN INDIA
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#3B3A3A] tracking-tight leading-[1.06] font-heading">
@@ -89,11 +88,11 @@ export const HomePage: React.FC = () => {
                 We manufacture high-performance trailers designed to handle the toughest loads, harshest terrains, and longest hauls. When strength, safety, and reliability matter, our engineering delivers without compromise.
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              {/* CTAs (Only 2 Clean Action Buttons) */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Link
                   to="/products"
-                  className="py-3.5 px-7 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-[#F68722]/25 hover:shadow-xl hover:shadow-[#F68722]/35 active:scale-95 transition-all group"
+                  className="py-3.5 px-8 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-[#F68722]/25 hover:shadow-xl hover:shadow-[#F68722]/35 active:scale-95 transition-all group"
                 >
                   <span>Explore Products</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -101,20 +100,10 @@ export const HomePage: React.FC = () => {
 
                 <Link
                   to="/contact"
-                  className="py-3.5 px-7 bg-[#3B3A3A] hover:bg-[#222222] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-sm active:scale-95 transition-all"
+                  className="py-3.5 px-8 bg-[#3B3A3A] hover:bg-[#222222] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-sm active:scale-95 transition-all"
                 >
                   <span>Request Quote</span>
                 </Link>
-
-                <a
-                  href={`tel:${COMPANY_INFO.phone}`}
-                  className="py-3.5 px-4 text-[#3B3A3A] hover:text-[#F68722] font-bold text-xs sm:text-sm flex items-center gap-2 transition-colors group"
-                >
-                  <div className="w-7 h-7 rounded-lg bg-[#F68722]/10 flex items-center justify-center text-[#F68722] group-hover:bg-[#F68722] group-hover:text-white transition-colors">
-                    <Phone className="w-3.5 h-3.5" />
-                  </div>
-                  <span>Call: {COMPANY_INFO.phoneDisplay}</span>
-                </a>
               </div>
 
               {/* Trust Badges with Animated Stats */}

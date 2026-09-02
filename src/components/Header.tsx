@@ -10,6 +10,7 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
+    { path: '/3d-preview', label: '3D Experience' },
     { path: '/products', label: 'Products & Fleet' },
     { path: '/about-us', label: 'Engineering & Plant' },
     { path: '/contact', label: 'Contact Sales' },

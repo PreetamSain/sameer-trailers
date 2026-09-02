@@ -71,10 +71,79 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // Effective progress: hover ignites the card to 100%
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
-  // Cloud coordinates (scaling from top to bottom)
-  // When p = 0: y = -350 (clouds are fully above card, 0% orange visible)
-  // When p = 1: y = 1200 (clouds have fully passed bottom, 100% orange visible)
-  const y = -350 + effectiveProgress * 1550;
+  // Derive unique deterministic variant & seed for each card so NO TWO CARDS LOOK ALIKE!
+  // Completely eliminates the repetitive symmetrical loop and matches the reference closeup
+  const hash = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const cardSeed = (hash % 19) + 2;
+  const variant = hash % 4;
+
+  // Asymmetric detached droplets floating ahead of the straight horizontal advancing edge
+  // (Matches the exact Heron AI reference closeup with detached floating islands)
+  const dropletPresets = [
+    // Variant 0: Left & center clusters with drifting drops on right
+    [
+      { cx: 120, dy: 45, r: 34 },
+      { cx: 170, dy: 95, r: 42 },
+      { cx: 140, dy: 155, r: 26 },
+      { cx: 230, dy: 60, r: 24 },
+      { cx: 410, dy: 50, r: 38 },
+      { cx: 470, dy: 110, r: 46 },
+      { cx: 520, dy: 170, r: 28 },
+      { cx: 580, dy: 75, r: 32 },
+      { cx: 740, dy: 45, r: 26 },
+      { cx: 810, dy: 100, r: 36 },
+      { cx: 860, dy: 160, r: 22 },
+      { cx: 920, dy: 60, r: 18 }
+    ],
+    // Variant 1: Dense center drops with deep floating splatter dots
+    [
+      { cx: 180, dy: 55, r: 26 },
+      { cx: 290, dy: 90, r: 34 },
+      { cx: 340, dy: 150, r: 28 },
+      { cx: 480, dy: 60, r: 42 },
+      { cx: 540, dy: 125, r: 50 },
+      { cx: 510, dy: 195, r: 30 },
+      { cx: 620, dy: 70, r: 38 },
+      { cx: 680, dy: 135, r: 36 },
+      { cx: 750, dy: 190, r: 24 },
+      { cx: 830, dy: 50, r: 22 },
+      { cx: 900, dy: 80, r: 20 }
+    ],
+    // Variant 2: Left-heavy cascade with deep floating dots
+    [
+      { cx: 90, dy: 60, r: 24 },
+      { cx: 140, dy: 115, r: 40 },
+      { cx: 210, dy: 70, r: 36 },
+      { cx: 190, dy: 170, r: 28 },
+      { cx: 270, dy: 125, r: 32 },
+      { cx: 410, dy: 65, r: 30 },
+      { cx: 470, dy: 120, r: 38 },
+      { cx: 600, dy: 50, r: 26 },
+      { cx: 720, dy: 85, r: 34 },
+      { cx: 780, dy: 155, r: 24 },
+      { cx: 880, dy: 60, r: 20 }
+    ],
+    // Variant 3: Right-heavy cascade with isolated organic islands
+    [
+      { cx: 150, dy: 45, r: 22 },
+      { cx: 260, dy: 60, r: 28 },
+      { cx: 390, dy: 75, r: 32 },
+      { cx: 520, dy: 55, r: 30 },
+      { cx: 610, dy: 105, r: 40 },
+      { cx: 670, dy: 170, r: 32 },
+      { cx: 750, dy: 70, r: 44 },
+      { cx: 820, dy: 135, r: 48 },
+      { cx: 790, dy: 205, r: 26 },
+      { cx: 900, dy: 80, r: 30 },
+      { cx: 940, dy: 145, r: 20 }
+    ]
+  ];
+
+  const droplets = dropletPresets[variant];
+
+  // Straight horizontal progression:
+  // Starts with all droplets above the card (y = -260), finishes past the bottom (y = 1050)
+  const y = -260 + effectiveProgress * 1310;
 
   // Smooth feathered text reveal percentage (completely eliminates hard cut lines)
   const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
@@ -124,8 +193,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. SOFT BILLOWING CLOUD DISPLACEMENT MASK (NO SCRATCHES) */}
-      {/* Low frequency (0.007) + 2 octaves + stdDev 4.5 = Soft Cumulus Cloud */}
+      {/* 2. STRAIGHT ADVANCING FRONT WITH DETACHED INK DROPLETS */}
+      {/* Exact Heron AI reference filter + asymmetric floating droplets */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -141,55 +210,57 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             height="160%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Soft Puffy Cloud Turbulence (NO scratchy grain) */}
+            {/* Exact Heron AI Displacement Filter */}
             <feTurbulence
-              type="turbulence"
-              baseFrequency="0.007 0.010"
-              numOctaves={2}
-              seed={4}
-              result="cloudNoise"
+              type="fractalNoise"
+              baseFrequency="0.038 0.046"
+              numOctaves={4}
+              seed={cardSeed}
+              result="noise"
             />
             <feDisplacementMap
               in="SourceGraphic"
-              in2="cloudNoise"
-              scale={115}
+              in2="noise"
+              scale={105}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={4.5}
+              stdDeviation={1.8}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.0} intercept={-0.5} />
+              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
             </feComponentTransfer>
           </filter>
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
-              {/* Base Upper Inflow */}
+              {/* Straight horizontal advancing fill (NO curve/bowl!) */}
               <path
                 fill="white"
-                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 200} -200 ${y} Z`}
+                d={`M -100 -100 L 1100 -100 L 1100 ${y} L -100 ${y} Z`}
               />
-              {/* Billowing Soft Cumulus Cloud Lobes */}
-              <circle cx="160" cy={y + 110} r="110" fill="white" />
-              <circle cx="380" cy={y + 150} r="130" fill="white" />
-              <circle cx="620" cy={y + 140} r="125" fill="white" />
-              <circle cx="840" cy={y + 100} r="105" fill="white" />
-              <circle cx="500" cy={y + 220} r="140" fill="white" />
-              <circle cx="280" cy={y + 190} r="95" fill="white" />
-              <circle cx="720" cy={y + 180} r="100" fill="white" />
+              {/* Asymmetric detached ink droplets floating ahead of the straight front */}
+              {droplets.map((d, i) => (
+                <circle
+                  key={i}
+                  cx={d.cx}
+                  cy={y + d.dy}
+                  r={d.r}
+                  fill="white"
+                />
+              ))}
             </g>
           </mask>
         </defs>
 
-        {/* Solid Brand Orange rectangle revealed by the soft cloud mask */}
+        {/* Solid Brand Orange rectangle revealed by the organic ink mask */}
         <rect
           width="1000"
           height="1000"
@@ -199,13 +270,13 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </svg>
 
       {/* ======================================================== */}
-      {/* 3. PURE WHITE TEXT OVERLAY LAYER (FEATHERED CLOUD TRANSITION) */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER (SMOOTH FEATHERED REVEAL) */}
       {/* ======================================================== */}
       <div
         className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-200 ease-out"
         style={{
-          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 20)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 25)}%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 20)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 25)}%)`,
+          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 12)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 18)}%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 12)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 18)}%)`,
           opacity: effectiveProgress > 0.02 ? 1 : 0
         }}
       >

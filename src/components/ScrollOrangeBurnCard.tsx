@@ -138,11 +138,35 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
     ]
   ];
 
-  const cloudPuffs = cloudPresets[variant];
+  const p = Math.max(0, Math.min(1, effectiveProgress));
+  const y = -180 + p * 1360;
 
-  // Soft rolling cloud coordinates:
-  // Starts with all cloud puffs safely above the card (y = -320), finishes past bottom (y = 1100)
-  const y = -320 + effectiveProgress * 1420;
+  // Unpredictable multi-harmonic crests and deep voids (kabhi kahi hai, kabhi kahi nahi hai)
+  // Each card has its own custom seed and phase offset so every card's cloud is unique!
+  const phase = (cardSeed * 0.73) % 6.28;
+  const c1 = Math.sin(p * 5.1 + phase + 0.8) * 85 + 35;
+  const c2 = -Math.cos(p * 3.7 + phase + 1.2) * 95 - 45; // deep void
+  const c3 = Math.sin(p * 3.2 + phase + 2.5) * 145 + 85; // surging cloud lobe
+  const c4 = Math.cos(p * 4.3 + phase + 0.5) * 115 + 40;
+  const c5 = -Math.sin(p * 4.8 + phase + 1.9) * 85 - 35; // deep void
+  const c6 = Math.sin(p * 2.9 + phase + 1.1) * 100 + 50;
+
+  // Complex organic undulating perimeter (Never a simple bubble parabola)
+  const cloudContourD =
+    `M -150 -200 L 1150 -200 L 1150 ${(y - 120).toFixed(1)} ` +
+    `Q 1000 ${(y + c1).toFixed(1)} 850 ${(y + c2).toFixed(1)} ` +
+    `Q 700 ${(y + c3).toFixed(1)} 550 ${(y + c4).toFixed(1)} ` +
+    `Q 400 ${(y + c5).toFixed(1)} 250 ${(y + c6).toFixed(1)} ` +
+    `Q 100 ${(y + c1).toFixed(1)} -150 ${y.toFixed(1)} Z`;
+
+  // Detached, unpredictable floating cloud islands (kabhi kahi hai, kabhi kahi nahi hai)
+  const cloudIslands = p > 0.04 && p < 0.96 ? [
+    { cx: 280, cy: y + 175 + Math.sin(p * 7 + phase) * 45, r: 80 + Math.cos(p * 6) * 20 },
+    { cx: 720, cy: y + 235 + Math.cos(p * 6 + phase) * 55, r: 98 + Math.sin(p * 5) * 25 },
+    { cx: 510, cy: y + 275 + Math.sin(p * 8 + phase) * 40, r: 68 + Math.sin(p * 7) * 18 },
+    { cx: 140, cy: y + 145 + Math.cos(p * 9 + phase) * 35, r: 62 },
+    { cx: 890, cy: y + 165 + Math.sin(p * 5 + phase) * 40, r: 72 },
+  ] : [];
 
   // Smooth feathered text reveal percentage (completely eliminates hard cut lines)
   const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
@@ -192,8 +216,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. REAL SOFT BILLOWING CLOUD MASK (NO SCRATCHES, NO FLAT LINE) */}
-      {/* Low frequency (0.004) + stdDev 7.5 = True Soft Puffy Cloud */}
+      {/* 2. REAL UNPREDICTABLE BILLOWING CLOUD MASK (NO BUBBLE, NO SCRATCHES) */}
+      {/* Multi-harmonic crests + deep voids + floating islands */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -209,49 +233,47 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             height="170%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Real Soft Puffy Cloud Filter - Low frequency, NO scratches, High blur */}
+            {/* Real Soft Puffy Cloud Filter - Medium-low frequency, NO scratches, High vapor haze */}
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.004 0.006"
-              numOctaves={2}
+              baseFrequency="0.010 0.014"
+              numOctaves={3}
               seed={cardSeed}
               result="cloudNoise"
             />
             <feDisplacementMap
               in="SourceGraphic"
               in2="cloudNoise"
-              scale={85}
+              scale={150}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={7.5}
+              stdDeviation={4.2}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.5} intercept={-0.7} />
+              <feFuncA type="linear" slope={2.8} intercept={-0.75} />
             </feComponentTransfer>
           </filter>
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
-              {/* Base Upper Inflow */}
               <path
                 fill="white"
-                d={`M -100 -100 L 1100 -100 L 1100 ${y} L -100 ${y} Z`}
+                d={cloudContourD}
               />
-              {/* Overlapping billowing cloud lobes & floating wisps (Multi-depth cloud) */}
-              {cloudPuffs.map((puff, i) => (
+              {cloudIslands.map((island, idx) => (
                 <circle
-                  key={i}
-                  cx={puff.cx}
-                  cy={y + puff.dy}
-                  r={puff.r}
+                  key={idx}
+                  cx={island.cx}
+                  cy={island.cy}
+                  r={island.r}
                   fill="white"
                 />
               ))}

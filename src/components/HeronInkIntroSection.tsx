@@ -43,12 +43,39 @@ export const HeronInkIntroSection: React.FC = () => {
     };
   }, []);
 
-  // Exact Heron AI formula:
-  // Start: M 0 0 Q 500 0 1000 0 L 1000 0 L 0 0 Z
-  // Final: M 0 1000 Q 500 1250 1000 1000 L 1000 0 L 0 0 Z
-  const y = progress * 1000;
-  const curve = Math.min(250, progress * 250);
-  const maskPathD = `M 0 ${y.toFixed(2)} Q 500 ${(y + curve).toFixed(2)} 1000 ${y.toFixed(2)} L 1000 0 L 0 0 Z`;
+  // ========================================================
+  // UNPREDICTABLE BILLOWING CLOUD TRANSITION (बादल / धुंध)
+  // Eliminates bubble shape: asymmetric multi-harmonic crests,
+  // natural voids/gaps, and detached drifting cloud islands.
+  // ========================================================
+  const p = Math.max(0, Math.min(1, progress));
+  const y = -160 + p * 1320;
+
+  // Asymmetric multi-harmonic crests and deep receding voids (kabhi kahi hai, kabhi kahi nahi hai)
+  const c1 = Math.sin(p * 5.1 + 0.9) * 85 + 35;  // Left flank swell
+  const c2 = -Math.cos(p * 3.7 + 1.4) * 95 - 45; // Deep void / gap where cloud recedes
+  const c3 = Math.sin(p * 3.2 + 2.8) * 145 + 85; // Deep surging cloud head
+  const c4 = Math.cos(p * 4.3 + 0.6) * 115 + 40; // Right-center secondary puff
+  const c5 = -Math.sin(p * 4.8 + 2.1) * 85 - 35; // Secondary void / gap
+  const c6 = Math.sin(p * 2.9 + 1.2) * 100 + 50; // Far right trailing wisp
+
+  // Complex organic undulating perimeter (Never a simple bubble parabola)
+  const cloudContourD =
+    `M -150 -200 L 1150 -200 L 1150 ${(y - 120).toFixed(1)} ` +
+    `Q 1000 ${(y + c1).toFixed(1)} 850 ${(y + c2).toFixed(1)} ` +
+    `Q 700 ${(y + c3).toFixed(1)} 550 ${(y + c4).toFixed(1)} ` +
+    `Q 400 ${(y + c5).toFixed(1)} 250 ${(y + c6).toFixed(1)} ` +
+    `Q 100 ${(y + c1).toFixed(1)} -150 ${y.toFixed(1)} Z`;
+
+  // Detached, unpredictable floating cloud islands (kabhi kahi hai, kabhi kahi nahi hai)
+  const cloudIslands = p > 0.04 && p < 0.96 ? [
+    { cx: 280, cy: y + 175 + Math.sin(p * 7) * 45, r: 80 + Math.cos(p * 6) * 20 },
+    { cx: 720, cy: y + 235 + Math.cos(p * 6) * 55, r: 98 + Math.sin(p * 5) * 25 },
+    { cx: 510, cy: y + 275 + Math.sin(p * 8) * 40, r: 68 + Math.sin(p * 7) * 18 },
+    { cx: 140, cy: y + 145 + Math.cos(p * 9) * 35, r: 62 },
+    { cx: 890, cy: y + 165 + Math.sin(p * 5) * 40, r: 72 },
+    { cx: 390, cy: y + 215 + Math.sin(p * 9) * 30, r: 58 },
+  ] : [];
 
   const partnerLogos = [
     'TATA MOTORS FLEET',
@@ -76,7 +103,7 @@ export const HeronInkIntroSection: React.FC = () => {
         <div className="w-layout-blockcontainer container full-h grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           
           {/* ======================================================== */}
-          {/* LEFT: EXACT HERON AI DUAL-LAYER INK MASK VISUAL */}
+          {/* LEFT: EXACT UNPREDICTABLE BILLOWING CLOUD MASK VISUAL */}
           {/* ======================================================== */}
           <div className="lg:col-span-6 home-intro-img-wrap">
             <div className="home-intro-img relative w-full aspect-[1000/1012] max-w-[540px] mx-auto rounded-3xl overflow-hidden border border-[#DFD7CB] bg-white shadow-2xl shadow-black/5">
@@ -92,7 +119,7 @@ export const HeronInkIntroSection: React.FC = () => {
                   />
                 </div>
 
-                {/* 2. Sub Layer: Exact Heron AI SVG Displacement Mask */}
+                {/* 2. Sub Layer: Organic Unpredictable Cloud Displacement Mask */}
                 <div className="ink-mask-img sub ink-filter absolute inset-0">
                   <svg
                     width="100%"
@@ -103,34 +130,44 @@ export const HeronInkIntroSection: React.FC = () => {
                   >
                     <defs>
                       <mask id="inkCircleMask-0" maskContentUnits="userSpaceOnUse">
-                        <path
-                          fill="white"
-                          style={{ filter: 'url(#sharedDisplacementFilter)' }}
-                          d={maskPathD}
-                          data-value-final="M 0 1000 Q 500 1250 1000 1000 L 1000 0 L 0 0 Z"
-                          className="mask"
-                        />
+                        <g style={{ filter: 'url(#sharedDisplacementFilter)' }}>
+                          <path
+                            fill="white"
+                            d={cloudContourD}
+                            className="mask"
+                          />
+                          {cloudIslands.map((island, idx) => (
+                            <circle
+                              key={idx}
+                              cx={island.cx}
+                              cy={island.cy}
+                              r={island.r}
+                              fill="white"
+                            />
+                          ))}
+                        </g>
                       </mask>
 
-                      {/* Exact Heron AI Displacement Filter Formula */}
-                      <filter id="sharedDisplacementFilter">
+                      {/* Authentic Rolling Cloud Vapor Turbulence Filter */}
+                      <filter id="sharedDisplacementFilter" x="-35%" y="-35%" width="170%" height="170%">
                         <feTurbulence
                           type="fractalNoise"
-                          baseFrequency="0.045 0.055"
+                          baseFrequency="0.011 0.015"
                           numOctaves={4}
-                          seed={5}
-                          result="noise"
+                          seed={23}
+                          result="cloudNoise"
                         />
                         <feDisplacementMap
                           in="SourceGraphic"
-                          in2="noise"
-                          scale={100}
+                          in2="cloudNoise"
+                          scale={165}
                           xChannelSelector="R"
                           yChannelSelector="G"
+                          result="displaced"
                         />
-                        <feGaussianBlur stdDeviation="1.8" result="blurred" />
+                        <feGaussianBlur in="displaced" stdDeviation={3.5} result="blurred" />
                         <feComponentTransfer in="blurred" result="contrast">
-                          <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+                          <feFuncA type="linear" slope={2.8} intercept={-0.75} />
                         </feComponentTransfer>
                       </filter>
                     </defs>

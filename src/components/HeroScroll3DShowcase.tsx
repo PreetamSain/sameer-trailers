@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ShieldCheck, CheckCircle2, ArrowRight, Phone, Truck, Layers, Scale } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, ArrowRight, Phone, Truck, Layers, Scale, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AnimatedCounter } from './AnimatedCounter';
 import { HeroParticles } from './HeroParticles';
@@ -8,104 +8,58 @@ import { COMPANY_INFO } from '../data/trailers';
 
 const TOTAL_FRAMES = 246;
 
-interface ChapterInfo {
-  id: string;
-  badge: string;
-  title: string;
-  statValue: string;
-  statLabel: string;
-  description: string;
-  keyPoints: string[];
-}
-
-const CHAPTERS: ChapterInfo[] = [
-  {
-    id: 'ch-1',
-    badge: 'STAGE 01 — AERODYNAMIC INDUSTRIAL STANCE',
-    title: 'Engineered for Heavy Commercial Transit',
-    statValue: '700 MPa',
-    statLabel: 'DOMEX High-Yield Steel',
-    description: 'High-tensile European DOMEX 700 steel construction reduces tare dead weight by up to 1.8 Tons while maximizing legal revenue payload across national highway corridors.',
-    keyPoints: [
-      'Reinforced front kingpin box & JOST landing gear',
-      'Aerodynamic headboard profile minimizes wind drag',
-      '100% ARAI AIS-113 & CMVR certified geometry'
-    ]
-  },
-  {
-    id: 'ch-2',
-    badge: 'STAGE 02 — ROBOTIC CHASSIS WELDING',
-    title: 'Continuous Robotic SAW Long-Beams',
-    statValue: '100%',
-    statLabel: 'Submerged Arc Welds',
-    description: 'Main longitudinal I-beams fabricated with automated double-sided Submerged Arc Welding (SAW) to prevent structural beam sag and metal fatigue over millions of kilometers.',
-    keyPoints: [
-      'Zero longitudinal sagging under peak 55T+ loads',
-      'High-grade SA 2.5 white-metal shot blasted steel',
-      'Dual-coat polyurethane anti-corrosion paint system'
-    ]
-  },
-  {
-    id: 'ch-3',
-    badge: 'STAGE 03 — TRIDEM RUNNING GEAR',
-    title: '3 x 14 Ton Axles & Multi-Leaf Suspension',
-    statValue: '3 x 14T',
-    statLabel: 'Axle Capacity',
-    description: 'Heavy-duty multi-leaf spring suspension combined with precision equalizer beams ensures optimal weight distribution across all 3 axles, preventing uneven tire wear.',
-    keyPoints: [
-      'Heavy-duty bronze-bushed equalizer rocker beams',
-      'WABCO dual-line pneumatic fail-safe air brake system',
-      'Automatic slack adjusters & reinforced wheel hubs'
-    ]
-  },
-  {
-    id: 'ch-4',
-    badge: 'STAGE 04 — MAXIMUM BULK PAYLOAD',
-    title: 'Built for India’s Demanding Corridors',
-    statValue: '55T+',
-    statLabel: 'Certified Payload Rating',
-    description: 'From rugged mining zones to express highway freight, Sameer Commercial Trailers deliver industry-leading reliability, lower diesel consumption, and maximum fleet ROI.',
-    keyPoints: [
-      '15+ years proven operational chassis lifespan',
-      'Customized engineering for cement, steel, machinery & bulk',
-      'Direct factory warranty & rapid nationwide delivery'
-    ]
-  }
-];
-
 export const HeroScroll3DShowcase: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [activeChapterIndex, setActiveChapterIndex] = useState<number>(0);
+  const [scrollP, setScrollP] = useState<number>(0);
   const [isPreloaded, setIsPreloaded] = useState<boolean>(false);
-  const [loadedCount, setLoadedCount] = useState<number>(0);
   const imagesRef = useRef<HTMLImageElement[]>([]);
 
-  // Scroll Progress across 350vh pinned container
+  // Smooth scroll progress measurement across 400vh container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 30,
+    stiffness: 120,
+    damping: 28,
     restDelta: 0.0005
   });
 
-  // Dynamic Layout Transforms as user scrolls down:
-  // Phase 1 (0.0 to 0.18): Hero text fades & slides left; 3D Box expands to full width
-  const heroTextOpacity = useTransform(smoothProgress, [0, 0.12], [1, 0]);
-  const heroTextX = useTransform(smoothProgress, [0, 0.14], [0, -60]);
+  // ========================================================
+  // CONTINUOUS SMOOTH TRANSFORMS (Zero sudden jumping!)
+  // ========================================================
+  
+  // 1. Initial Hero Left Typography (Fades & slides left smoothly as scroll starts 0.0 -> 0.18)
+  const leftTextOpacity = useTransform(smoothProgress, [0, 0.14], [1, 0]);
+  const leftTextX = useTransform(smoothProgress, [0, 0.16], [0, -100]);
+  const leftTextScale = useTransform(smoothProgress, [0, 0.16], [1, 0.94]);
 
-  // Canvas Container positioning: starts as 2-column card, scales & expands to full screen
-  const isExpanded = useTransform(smoothProgress, (v) => v > 0.1);
-  const [expandedState, setExpandedState] = useState(false);
+  // 2. Right Canvas Card Smooth Expansion into Full-Screen Center Stage (0.0 -> 0.22)
+  // On desktop: width expands from 48% to 100%, X shifts from right-aligned to 0 center, scale expands from 1.0 to 1.15
+  const cardScale = useTransform(smoothProgress, [0, 0.22], [1.0, 1.12]);
+  const cardXOffset = useTransform(smoothProgress, [0, 0.22], ['0%', '-24%']); // Moves from right column to exact center
+  const backdropBorderOpacity = useTransform(smoothProgress, [0, 0.12], [1, 0]); // Orange frame fades out seamlessly
 
-  // Chapter HUD overlay opacity (only visible after expansion, 0.18 to 0.95)
-  const hudOpacity = useTransform(smoothProgress, [0.15, 0.22, 0.94, 1.0], [0, 1, 1, 0]);
+  // 3. Floating Editorial Callouts (Fade in smoothly across distinct stages 0.20 -> 1.0)
+  // Stage 1 Callouts (0.20 to 0.44)
+  const stage1Opacity = useTransform(smoothProgress, [0.18, 0.24, 0.40, 0.45], [0, 1, 1, 0]);
+  const stage1Y = useTransform(smoothProgress, [0.18, 0.24, 0.40, 0.45], [20, 0, 0, -20]);
 
-  // 1. PRELOAD ALL 246 WEBP FRAMES
+  // Stage 2 Callouts (0.45 to 0.68)
+  const stage2Opacity = useTransform(smoothProgress, [0.44, 0.49, 0.64, 0.69], [0, 1, 1, 0]);
+  const stage2Y = useTransform(smoothProgress, [0.44, 0.49, 0.64, 0.69], [20, 0, 0, -20]);
+
+  // Stage 3 Callouts (0.69 to 0.88)
+  const stage3Opacity = useTransform(smoothProgress, [0.68, 0.73, 0.84, 0.89], [0, 1, 1, 0]);
+  const stage3Y = useTransform(smoothProgress, [0.68, 0.73, 0.84, 0.89], [20, 0, 0, -20]);
+
+  // Stage 4 Callouts (0.89 to 1.0)
+  const stage4Opacity = useTransform(smoothProgress, [0.88, 0.92, 0.98, 1.0], [0, 1, 1, 1]);
+  const stage4Y = useTransform(smoothProgress, [0.88, 0.92], [20, 0]);
+
+  // 1. PRELOAD 246 WEBP FRAMES
   useEffect(() => {
     let mounted = true;
     const images: HTMLImageElement[] = [];
@@ -119,8 +73,7 @@ export const HeroScroll3DShowcase: React.FC = () => {
       img.onload = () => {
         if (!mounted) return;
         count++;
-        setLoadedCount(count);
-        if (count >= 25) {
+        if (count >= 20) {
           setIsPreloaded(true);
         }
       };
@@ -180,23 +133,12 @@ export const HeroScroll3DShowcase: React.FC = () => {
   // 3. LISTEN TO SMOOTH SCROLL PROGRESS & SCRUB FRAMES
   useEffect(() => {
     return smoothProgress.on('change', (progress) => {
-      setExpandedState(progress > 0.12);
+      setScrollP(progress);
 
-      // Frame scrubbing (progress 0.0 to 1.0 -> frame 0 to 245)
+      // Frame scrubbing: progress 0.0 to 1.0 -> frame 0 to 245
       const clamped = Math.max(0, Math.min(progress, 0.9999));
       const frameIdx = Math.floor(clamped * (TOTAL_FRAMES - 1));
       drawFrame(frameIdx);
-
-      // Determine active chapter (across 0.20 to 1.0)
-      if (progress < 0.38) {
-        setActiveChapterIndex(0);
-      } else if (progress < 0.60) {
-        setActiveChapterIndex(1);
-      } else if (progress < 0.82) {
-        setActiveChapterIndex(2);
-      } else {
-        setActiveChapterIndex(3);
-      }
     });
   }, [smoothProgress]);
 
@@ -207,10 +149,8 @@ export const HeroScroll3DShowcase: React.FC = () => {
     }
   }, [isPreloaded]);
 
-  const currentChapter = CHAPTERS[activeChapterIndex];
-
   return (
-    <section ref={containerRef} className="relative h-[380vh] bg-[#FFFBF7]">
+    <section ref={containerRef} className="relative h-[420vh] bg-[#FFFBF7]">
       
       {/* Sticky Full-Screen Pinned Stage */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
@@ -225,177 +165,211 @@ export const HeroScroll3DShowcase: React.FC = () => {
           }}
         />
 
-        {/* 1. INITIAL HERO LANDING VIEW (Fades & slides out as scroll starts) */}
-        {!expandedState && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 py-6 sm:py-12 absolute inset-x-0">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              
-              {/* Left Column: Hero Copy & CTAs */}
-              <motion.div
-                style={{
-                  opacity: heroTextOpacity,
-                  x: heroTextX
-                }}
-                className="lg:col-span-6 space-y-6"
-              >
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-[#F68722] uppercase tracking-wider font-mono-specs">
-                    MADE IN INDIA
-                  </span>
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#3B3A3A] font-heading leading-tight tracking-tight">
-                    BUILT TO PERFORM.<br />
-                    <span className="text-[#F68722]">BUILT TO LAST.</span>
-                  </h1>
+        {/* UNIFIED CONTAINER (Handles both Initial Hero & Full Screen 3D smoothly) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 py-6 sm:py-10 flex-1 flex flex-col justify-center">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full relative">
+            
+            {/* 1. LEFT INITIAL HERO COPY (Slides smoothly left & fades out on scroll) */}
+            <motion.div
+              style={{
+                opacity: leftTextOpacity,
+                x: leftTextX,
+                scale: leftTextScale
+              }}
+              className="lg:col-span-6 space-y-6 select-none"
+            >
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-[#F68722] uppercase tracking-wider font-mono-specs">
+                  MADE IN INDIA
+                </span>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#3B3A3A] font-heading leading-tight tracking-tight">
+                  BUILT TO PERFORM.<br />
+                  <span className="text-[#F68722]">BUILT TO LAST.</span>
+                </h1>
+              </div>
+
+              <p className="text-sm sm:text-base text-[#736F6A] max-w-lg leading-relaxed font-medium">
+                We manufacture high-performance commercial trailers designed to handle the toughest loads, harshest terrains, and longest hauls across India.
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link
+                  to="/products"
+                  className="bg-[#F68722] hover:bg-[#e07516] text-white px-7 py-3.5 rounded-2xl font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-[#F68722]/20 hover:shadow-xl hover:shadow-[#F68722]/30 transition-all duration-300 flex items-center gap-2 group cursor-pointer"
+                >
+                  <span>EXPLORE PRODUCTS</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="bg-[#3B3A3A] hover:bg-[#222222] text-white px-7 py-3.5 rounded-2xl font-bold text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                >
+                  REQUEST QUOTE
+                </Link>
+              </div>
+
+              {/* 3 Animated Stats */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#EFE8DF] max-w-lg">
+                <div>
+                  <div className="text-xs font-bold text-[#3B3A3A] font-mono-specs">ARAI AIS-113</div>
+                  <div className="text-[11px] text-[#736F6A]">100% Homologated</div>
                 </div>
-
-                <p className="text-sm sm:text-base text-[#736F6A] max-w-lg leading-relaxed">
-                  We manufacture high-performance trailers designed to handle the toughest loads, harshest terrains, and longest hauls. When strength, safety, and reliability matter, our engineering delivers without compromise.
-                </p>
-
-                {/* CTAs */}
-                <div className="flex flex-wrap gap-4 pt-2">
-                  <Link
-                    to="/products"
-                    className="bg-[#F68722] hover:bg-[#e07516] text-white px-7 py-3.5 rounded-2xl font-bold text-sm tracking-wide shadow-lg shadow-[#F68722]/20 hover:shadow-xl hover:shadow-[#F68722]/30 transition-all duration-300 flex items-center gap-2 group cursor-pointer"
-                  >
-                    <span>EXPLORE PRODUCTS</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                  <Link
-                    to="/contact"
-                    className="bg-[#3B3A3A] hover:bg-[#2A2929] text-white px-7 py-3.5 rounded-2xl font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
-                  >
-                    REQUEST QUOTE
-                  </Link>
+                <div>
+                  <div className="text-xs font-bold text-[#F68722] font-mono-specs">
+                    <AnimatedCounter end={700} suffix=" MPa" />
+                  </div>
+                  <div className="text-[11px] text-[#736F6A]">High-Tensile Steel</div>
                 </div>
-
-                {/* 3 Stats Counters */}
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#EFE8DF]">
-                  <div>
-                    <span className="text-xs font-bold text-[#3B3A3A] font-mono-specs block">ARAI AIS-113</span>
-                    <span className="text-[11px] text-[#736F6A]">100% Homologated</span>
+                <div>
+                  <div className="text-xs font-bold text-[#3B3A3A] font-mono-specs">
+                    <AnimatedCounter end={55} suffix="T+ Max" />
                   </div>
-                  <div>
-                    <span className="text-xs font-bold text-[#F68722] font-mono-specs block">
-                      <AnimatedCounter end={700} suffix=" MPa" />
-                    </span>
-                    <span className="text-[11px] text-[#736F6A]">High-Tensile Steel</span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-[#3B3A3A] font-mono-specs block">
-                      <AnimatedCounter end={55} suffix="T+ Max" />
-                    </span>
-                    <span className="text-[11px] text-[#736F6A]">Payload Capacity</span>
-                  </div>
+                  <div className="text-[11px] text-[#736F6A]">Payload Capacity</div>
                 </div>
-              </motion.div>
+              </div>
+            </motion.div>
 
-              {/* Right Column: Initial 2-Column Hero Card */}
-              <div className="lg:col-span-6 flex justify-center">
-                <div className="relative w-full max-w-lg aspect-[16/11] bg-white rounded-3xl p-3 shadow-xl border border-[#EFE8DF]">
-                  {/* Brochure Offset Solid Orange Frame */}
-                  <div className="absolute -bottom-3 -right-3 w-full h-full rounded-3xl bg-[#F68722] -z-10" />
+            {/* 2. RIGHT 3D TRAILER CARD (Smoothly expands & scales to center stage) */}
+            <motion.div
+              style={{
+                scale: cardScale,
+                x: cardXOffset
+              }}
+              className="lg:col-span-6 flex items-center justify-center relative w-full origin-center"
+            >
+              <div className="relative w-full aspect-[16/11] sm:aspect-[16/10] flex items-center justify-center">
+                
+                {/* Offset Orange Backdrop Shadow (Smoothly fades out as card expands) */}
+                <motion.div
+                  style={{ opacity: backdropBorderOpacity }}
+                  className="absolute -bottom-3 -right-3 w-full h-full rounded-3xl bg-[#F68722] -z-10"
+                />
 
+                {/* Main 3D Canvas Box (Border and background smoothly dissolve into transparent stage) */}
+                <div className="relative w-full h-full flex items-center justify-center">
                   <canvas
                     ref={canvasRef}
-                    className="w-full h-full object-contain rounded-2xl select-none"
+                    className="w-full h-full object-contain select-none drop-shadow-xl"
                   />
                 </div>
-              </div>
 
-            </div>
+              </div>
+            </motion.div>
+
           </div>
-        )}
 
-        {/* 2. EXPANDED FULL-SCREEN 3D SCROLL EXPERIENCE (Active from scroll > 12%) */}
-        {expandedState && (
-          <div className="absolute inset-0 w-full h-full flex flex-col justify-between p-4 sm:p-8 z-20">
-            
-            {/* Top HUD Bar */}
-            <motion.div
-              style={{ opacity: hudOpacity }}
-              className="max-w-7xl mx-auto w-full flex items-center justify-between border-b border-[#EFE8DF] pb-3"
-            >
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F68722] animate-pulse" />
-                <span className="text-xs font-black text-[#F68722] uppercase tracking-widest font-mono-specs">
-                  3D SCROLL ROTATION SHOWCASE
-                </span>
-              </div>
+          {/* ======================================================== */}
+          {/* FLOATING BODY PART CALLOUTS (Scattered around vehicle) */}
+          {/* ======================================================== */}
 
-              {/* Stage Pills */}
-              <div className="flex items-center gap-2">
-                {CHAPTERS.map((ch, idx) => {
-                  const isActive = activeChapterIndex === idx;
-                  return (
-                    <div
-                      key={ch.id}
-                      className={`px-3 py-1 rounded-xl text-[10px] font-bold font-mono-specs uppercase transition-all duration-300 flex items-center gap-1.5 ${
-                        isActive
-                          ? 'bg-[#3B3A3A] text-[#F68722] shadow-md scale-105'
-                          : 'bg-white text-[#736F6A] border border-[#EFE8DF]'
-                      }`}
-                    >
-                      <span>0{idx + 1}</span>
-                      <span className="hidden sm:inline">{ch.badge.split('—')[1]?.trim()}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-
-            {/* Centered Master 3D Trailer Canvas */}
-            <div className="flex-1 w-full max-w-6xl mx-auto flex items-center justify-center relative my-auto">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full max-h-[70vh] object-contain select-none drop-shadow-2xl"
-              />
+          {/* STAGE 01 CALLOUTS (Front / Stance View — 20% to 45%) */}
+          <motion.div
+            style={{ opacity: stage1Opacity, y: stage1Y }}
+            className="absolute top-8 left-6 sm:left-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-[#EFE8DF] shadow-xl"
+          >
+            <div className="flex items-center gap-2 text-[10px] font-black text-[#F68722] font-mono-specs uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#F68722] animate-ping" />
+              <span>01 / FRONT AERODYNAMICS</span>
             </div>
+            <h3 className="text-sm sm:text-base font-black text-[#3B3A3A] font-heading mt-1">
+              Low-Drag Cab Interface
+            </h3>
+            <p className="text-[11px] text-[#736F6A] leading-relaxed mt-0.5">
+              Aerodynamic headboard geometry reduces highway air resistance with heavy-duty JOST landing gear.
+            </p>
+          </motion.div>
 
-            {/* Bottom Left: Dynamic Technical Story Readout */}
-            <motion.div
-              style={{ opacity: hudOpacity }}
-              className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end border-t border-[#EFE8DF] pt-4"
-            >
-              <div className="md:col-span-7 space-y-2">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentChapter.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-1.5"
-                  >
-                    <span className="text-[11px] font-bold text-[#F68722] uppercase font-mono-specs">
-                      {currentChapter.badge}
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#3B3A3A] font-heading leading-tight">
-                      {currentChapter.title}
-                    </h2>
-                    <p className="text-xs text-[#736F6A] max-w-xl leading-relaxed">
-                      {currentChapter.description}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+          <motion.div
+            style={{ opacity: stage1Opacity, y: stage1Y }}
+            className="absolute bottom-8 left-6 sm:left-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-[#EFE8DF] shadow-xl"
+          >
+            <span className="text-xl font-black text-[#F68722] font-mono-specs block">700 MPa</span>
+            <span className="text-[10px] font-bold text-[#3B3A3A] uppercase font-mono-specs block">DOMEX High-Yield Steel</span>
+          </motion.div>
 
-              {/* Bottom Right: Live Metric & Scroll Prompt */}
-              <div className="md:col-span-5 flex flex-col md:items-end justify-between gap-3">
-                <div className="bg-white border border-[#EFE8DF] px-4 py-2 rounded-2xl shadow-sm flex items-center gap-3">
-                  <span className="text-xl font-black text-[#F68722] font-mono-specs">
-                    {currentChapter.statValue}
-                  </span>
-                  <span className="text-[10px] font-bold text-[#736F6A] uppercase font-mono-specs">
-                    {currentChapter.statLabel}
-                  </span>
-                </div>
-                <span className="text-[11px] font-bold text-[#F68722] font-mono-specs uppercase animate-bounce">
-                  ↓ SCROLL TO ROTATE & EXPLORE
-                </span>
-              </div>
-            </motion.div>
+          {/* STAGE 02 CALLOUTS (Chassis Long-Beam View — 45% to 68%) */}
+          <motion.div
+            style={{ opacity: stage2Opacity, y: stage2Y }}
+            className="absolute top-8 right-6 sm:right-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-[#EFE8DF] shadow-xl text-left"
+          >
+            <div className="flex items-center gap-2 text-[10px] font-black text-[#F68722] font-mono-specs uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#F68722] animate-ping" />
+              <span>02 / ROBOTIC METALLURGY</span>
+            </div>
+            <h3 className="text-sm sm:text-base font-black text-[#3B3A3A] font-heading mt-1">
+              Continuous Robotic SAW Welds
+            </h3>
+            <p className="text-[11px] text-[#736F6A] leading-relaxed mt-0.5">
+              Longitudinal I-beams welded on both sides to prevent beam sag and metal fatigue over millions of kilometers.
+            </p>
+          </motion.div>
 
+          <motion.div
+            style={{ opacity: stage2Opacity, y: stage2Y }}
+            className="absolute bottom-8 right-6 sm:right-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-[#EFE8DF] shadow-xl text-left"
+          >
+            <span className="text-xl font-black text-[#3B3A3A] font-mono-specs block">-1,800 KG</span>
+            <span className="text-[10px] font-bold text-[#F68722] uppercase font-mono-specs block">Lighter Tare Dead Weight</span>
+          </motion.div>
+
+          {/* STAGE 03 CALLOUTS (Rear Axles & Suspension — 69% to 88%) */}
+          <motion.div
+            style={{ opacity: stage3Opacity, y: stage3Y }}
+            className="absolute top-10 left-6 sm:left-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-[#EFE8DF] shadow-xl"
+          >
+            <div className="flex items-center gap-2 text-[10px] font-black text-[#F68722] font-mono-specs uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#F68722] animate-ping" />
+              <span>03 / RUNNING GEAR & AXLES</span>
+            </div>
+            <h3 className="text-sm sm:text-base font-black text-[#3B3A3A] font-heading mt-1">
+              3 x 14 Ton Heavy Tridem Axles
+            </h3>
+            <p className="text-[11px] text-[#736F6A] leading-relaxed mt-0.5">
+              Heavy multi-leaf springs & bronze-bushed equalizers distribute load evenly, preventing uneven tire scrubbing.
+            </p>
+          </motion.div>
+
+          <motion.div
+            style={{ opacity: stage3Opacity, y: stage3Y }}
+            className="absolute bottom-8 right-6 sm:right-12 max-w-xs z-30 pointer-events-none bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-[#EFE8DF] shadow-xl"
+          >
+            <span className="text-xl font-black text-[#F68722] font-mono-specs block">WABCO</span>
+            <span className="text-[10px] font-bold text-[#3B3A3A] uppercase font-mono-specs block">Dual-Line Pneumatic Brakes</span>
+          </motion.div>
+
+          {/* STAGE 04 CALLOUTS (Final Hero & Direct Action — 89% to 1.0) */}
+          <motion.div
+            style={{ opacity: stage4Opacity, y: stage4Y }}
+            className="absolute bottom-8 right-6 sm:right-12 max-w-sm z-30 pointer-events-auto bg-white/95 backdrop-blur-xl p-5 rounded-3xl border-2 border-[#EFE8DF] shadow-2xl space-y-3"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#F68722] font-mono-specs uppercase">STAGE 04 / CERTIFIED</span>
+              <span className="text-xs font-bold text-[#3B3A3A] font-mono-specs">ARAI AIS-113</span>
+            </div>
+            <h3 className="text-lg font-black text-[#3B3A3A] font-heading leading-tight">
+              55T+ Certified Dynamic Payload
+            </h3>
+            <p className="text-xs text-[#736F6A] leading-relaxed">
+              Engineered for maximum haulage profitability across all national corridors with 15+ years chassis lifespan.
+            </p>
+            <div className="pt-1 flex gap-2">
+              <Link
+                to="/contact"
+                className="flex-1 bg-[#F68722] hover:bg-[#e07516] text-white py-2.5 px-3 rounded-xl text-xs font-black font-mono-specs uppercase text-center shadow-md transition-all cursor-pointer"
+              >
+                REQUEST FACTORY QUOTE
+              </Link>
+            </div>
+          </motion.div>
+
+        </div>
+
+        {/* Bottom Persistent Scroll Helper */}
+        {scrollP < 0.95 && (
+          <div className="absolute bottom-3 inset-x-0 flex justify-center items-center gap-2 pointer-events-none text-[11px] font-bold text-[#736F6A] font-mono-specs uppercase">
+            <span className="text-[#F68722] animate-bounce">↓ SCROLL TO ROTATE IN 3D</span>
           </div>
         )}
 

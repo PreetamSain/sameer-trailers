@@ -31,6 +31,7 @@ import {
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
 import { ScrollOrangeBurnCard } from '../components/ScrollOrangeBurnCard';
+import { HeroTrailerParallax } from '../components/HeroTrailerParallax';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -128,26 +129,14 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Right Hero Image (Brochure Offset Accent Frame Design - Scaled Up & Clean) */}
+            {/* Right Hero Image (Brochure Offset Accent Frame Design - 3D Multi-Plane Parallax) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="lg:col-span-6 flex items-center justify-center p-1 sm:p-2"
             >
-              <div className="relative w-full group cursor-pointer">
-                {/* 1. Offset Brand Orange (#F68722) Backdrop Frame */}
-                <div className="absolute inset-0 bg-[#F68722] rounded-3xl translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300 -z-10" />
-
-                {/* 2. Main Foreground Image Container with transparent frame / hero image */}
-                <div className="relative w-full bg-white rounded-3xl p-3 sm:p-5 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center min-h-[340px] sm:min-h-[420px]">
-                  <img
-                    src="/assets/brochure-asset-21.png"
-                    alt="Sameer Commercial Trailer — Engineered Heavy Transport"
-                    className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain rounded-2xl scale-[1.06] sm:scale-[1.10] group-hover:scale-[1.14] transition-transform duration-500 drop-shadow-xl"
-                  />
-                </div>
-              </div>
+              <HeroTrailerParallax />
             </motion.div>
 
           </div>

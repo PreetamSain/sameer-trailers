@@ -37,11 +37,12 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       if (!cardRef.current) return;
       const rect = cardRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
+      const isMobile = window.innerWidth < 768;
 
-      // Starts when card top enters from bottom of screen (vh * 0.95)
-      // Reaches 100% full orange when card is in comfortable reading view (vh * 0.35)
-      const start = vh * 0.95;
-      const end = vh * 0.35;
+      // On mobile: compact focused window (vh * 0.72 to vh * 0.42) so cards animate strictly ONE BY ONE!
+      // On desktop: synchronized row window (vh * 0.88 to vh * 0.35)
+      const start = isMobile ? vh * 0.72 : vh * 0.88;
+      const end = isMobile ? vh * 0.42 : vh * 0.35;
       const raw = (start - rect.top) / (start - end);
       targetP = Math.max(0, Math.min(1, raw));
     };
@@ -70,12 +71,12 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // Effective progress: hover ignites the card to 100%
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
-  // Exact Heron AI Ink Mask curve coordinates (scaling from top to bottom)
-  // When p = 0: y = -350 (particles and wave are fully above card, 0% orange visible)
-  // When p = 1: y = 1200 (particles and wave have fully passed bottom, 100% orange visible)
+  // Cloud coordinates (scaling from top to bottom)
+  // When p = 0: y = -350 (clouds are fully above card, 0% orange visible)
+  // When p = 1: y = 1200 (clouds have fully passed bottom, 100% orange visible)
   const y = -350 + effectiveProgress * 1550;
 
-  // Smooth feathered text reveal percentage (completely eliminates the hard cut line!)
+  // Smooth feathered text reveal percentage (completely eliminates hard cut lines)
   const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
 
   return (
@@ -123,7 +124,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. EXACT HERON AI INK DISPLACEMENT MASK LAYER (LARGE PARTICLES) */}
+      {/* 2. SOFT BILLOWING CLOUD DISPLACEMENT MASK (NO SCRATCHES) */}
+      {/* Low frequency (0.007) + 2 octaves + stdDev 4.5 = Soft Cumulus Cloud */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -133,61 +135,61 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
         <defs>
           <filter
             id={filterId}
-            x="-40%"
-            y="-40%"
-            width="180%"
-            height="180%"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Bold Heron AI Style Displacement Filter */}
+            {/* Soft Puffy Cloud Turbulence (NO scratchy grain) */}
             <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.020 0.026"
-              numOctaves={4}
-              seed={7}
-              result="noise"
+              type="turbulence"
+              baseFrequency="0.007 0.010"
+              numOctaves={2}
+              seed={4}
+              result="cloudNoise"
             />
             <feDisplacementMap
               in="SourceGraphic"
-              in2="noise"
-              scale={240}
+              in2="cloudNoise"
+              scale={115}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={2.0}
+              stdDeviation={4.5}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+              <feFuncA type="linear" slope={2.0} intercept={-0.5} />
             </feComponentTransfer>
           </filter>
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
-              {/* Deep Parabolic Wave */}
+              {/* Base Upper Inflow */}
               <path
                 fill="white"
-                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 300} -200 ${y} Z`}
+                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 200} -200 ${y} Z`}
               />
-              {/* Large Organic Particle Splatter Droplets */}
-              <circle cx="220" cy={y + 170} r="45" fill="white" />
-              <circle cx="780" cy={y + 180} r="50" fill="white" />
-              <circle cx="500" cy={y + 280} r="42" fill="white" />
-              <circle cx="360" cy={y + 220} r="35" fill="white" />
-              <circle cx="640" cy={y + 230} r="38" fill="white" />
-              <circle cx="120" cy={y + 130} r="30" fill="white" />
-              <circle cx="880" cy={y + 140} r="32" fill="white" />
+              {/* Billowing Soft Cumulus Cloud Lobes */}
+              <circle cx="160" cy={y + 110} r="110" fill="white" />
+              <circle cx="380" cy={y + 150} r="130" fill="white" />
+              <circle cx="620" cy={y + 140} r="125" fill="white" />
+              <circle cx="840" cy={y + 100} r="105" fill="white" />
+              <circle cx="500" cy={y + 220} r="140" fill="white" />
+              <circle cx="280" cy={y + 190} r="95" fill="white" />
+              <circle cx="720" cy={y + 180} r="100" fill="white" />
             </g>
           </mask>
         </defs>
 
-        {/* Solid Brand Orange rectangle revealed by the large particle ink mask */}
+        {/* Solid Brand Orange rectangle revealed by the soft cloud mask */}
         <rect
           width="1000"
           height="1000"
@@ -197,14 +199,13 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </svg>
 
       {/* ======================================================== */}
-      {/* 3. PURE WHITE TEXT OVERLAY LAYER (100% FEATHERED - NO HARD LINE) */}
-      {/* Uses a smooth feathered gradient mask so words are never cut */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER (FEATHERED CLOUD TRANSITION) */}
       {/* ======================================================== */}
       <div
         className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-200 ease-out"
         style={{
-          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 18)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 28)}%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 18)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 28)}%)`,
+          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 20)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 25)}%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 20)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 25)}%)`,
           opacity: effectiveProgress > 0.02 ? 1 : 0
         }}
       >

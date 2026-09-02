@@ -9,7 +9,6 @@ import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
-import { Master3DExperiencePage } from './pages/Master3DExperiencePage';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -62,8 +61,6 @@ export function App() {
             <Route path="/product/:slug" element={<ProductDetailPage />} />
             <Route path="/about-us" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/3d-preview" element={<Master3DExperiencePage />} />
-            <Route path="/3d-experience" element={<Master3DExperiencePage />} />
           </Routes>
         </main>
 

@@ -31,6 +31,7 @@ import {
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
 import { NoiseFillCard } from '../components/NoiseFillCard';
+import { HeronShowcaseSection } from '../components/HeronShowcaseSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -286,48 +287,8 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. "DESIGNED FOR MAXIMUM PAYLOAD" BANNER */}
-      <section className="py-16 bg-[#3B3A3A] text-white relative overflow-hidden">
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#F68722]/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "100px" }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
-          >
-            <div className="md:col-span-8 space-y-3">
-              <span className="px-3 py-1 bg-[#F68722] text-white text-[10px] font-black uppercase tracking-wider rounded-md inline-block">
-                HIGH EFFICIENCY ENGINEERING
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-black font-heading leading-tight">
-                DESIGNED FOR MAXIMUM PAYLOAD
-              </h2>
-              <p className="text-xs sm:text-sm text-white/70 max-w-xl leading-relaxed">
-                Every trailer is engineered to reduce tare dead-weight while providing unyielding structural integrity, giving fleet operators more legal cargo capacity and better fuel economics.
-              </p>
-            </div>
-
-            <div className="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-3">
-              <Link
-                to="/contact"
-                className="py-3.5 px-6 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl text-center shadow-lg shadow-[#F68722]/30 active:scale-95 transition-all"
-              >
-                REQUEST FACTORY QUOTE
-              </Link>
-              <a
-                href={`tel:${COMPANY_INFO.phone}`}
-                className="py-3.5 px-6 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl text-center border border-white/10 transition-colors flex items-center justify-center gap-2"
-              >
-                <Phone className="w-4 h-4 text-[#F68722]" />
-                <span>Call: {COMPANY_INFO.phoneDisplay}</span>
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* 4. HERON AI INSPIRED ARCHITECTURAL BLUEPRINT & RISING ORANGE SUN SECTION */}
+      <HeronShowcaseSection />
 
       {/* 5. INDUSTRY SECTOR & CARGO APPLICATIONS */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">

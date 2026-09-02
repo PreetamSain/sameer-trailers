@@ -75,8 +75,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // When p = 1: y = 1200 (particles and wave have fully passed bottom, 100% orange visible)
   const y = -350 + effectiveProgress * 1550;
 
-  // White text layer clip-path to match top-to-bottom fill
-  const bottomInset = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
+  // Smooth feathered text reveal percentage (completely eliminates the hard cut line!)
+  const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
 
   return (
     <div
@@ -124,7 +124,6 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
 
       {/* ======================================================== */}
       {/* 2. EXACT HERON AI INK DISPLACEMENT MASK LAYER (LARGE PARTICLES) */}
-      {/* Scale increased to 240 + Lower Frequency (0.02) + Splash Droplets */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -158,14 +157,14 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={2.2}
+              stdDeviation={2.0}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.8} intercept={-0.8} />
+              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
             </feComponentTransfer>
           </filter>
 
@@ -174,7 +173,7 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
               {/* Deep Parabolic Wave */}
               <path
                 fill="white"
-                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 260} -200 ${y} Z`}
+                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 300} -200 ${y} Z`}
               />
               {/* Large Organic Particle Splatter Droplets */}
               <circle cx="220" cy={y + 170} r="45" fill="white" />
@@ -198,14 +197,15 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </svg>
 
       {/* ======================================================== */}
-      {/* 3. PURE WHITE TEXT OVERLAY LAYER */}
-      {/* Synchronized with the advancing ink layer */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER (100% FEATHERED - NO HARD LINE) */}
+      {/* Uses a smooth feathered gradient mask so words are never cut */}
       {/* ======================================================== */}
       <div
-        className="absolute inset-0 pointer-events-none z-20 text-white transition-[clip-path] duration-150 ease-out"
+        className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-200 ease-out"
         style={{
-          clipPath: `inset(0% 0% ${bottomInset}% 0%)`,
-          WebkitClipPath: `inset(0% 0% ${bottomInset}% 0%)`
+          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 18)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 28)}%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 18)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 28)}%)`,
+          opacity: effectiveProgress > 0.02 ? 1 : 0
         }}
       >
         <div className="p-6 space-y-4 flex flex-col justify-between h-full">

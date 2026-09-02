@@ -30,7 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
-import { WeighbridgeTelemetryShowcase } from '../components/WeighbridgeTelemetryShowcase';
+import { XRayMetallurgyShowcase } from '../components/XRayMetallurgyShowcase';
 import { HeroScroll3DShowcase } from '../components/HeroScroll3DShowcase';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -228,8 +228,8 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2.5. INTELLIGENT ON-SITE WEIGHBRIDGE & TELEMETRY SHOWCASE (Cula.tech style Holographic Video) */}
-      <WeighbridgeTelemetryShowcase />
+      {/* 2.5. BESPOKE 3D X-RAY METALLURGY & STRESS-TEST DIAGNOSTICS */}
+      <XRayMetallurgyShowcase />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

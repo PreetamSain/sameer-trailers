@@ -155,7 +155,10 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. FEATURED PRODUCTS ("WHAT WE BUILD") */}
+      {/* 2. HERON AI ARCHITECTURAL INK-MASK INTRO SECTION */}
+      <HeronInkIntroSection />
+
+      {/* 3. FEATURED PRODUCTS ("WHAT WE BUILD") */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
@@ -374,9 +377,6 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
-
-      {/* 5.5 HERON AI INSPIRED INK-MASK DISSOLVE SHOWCASE */}
-      <HeronInkIntroSection />
 
       {/* 6. "STRENGTH THAT SETS US APART" */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

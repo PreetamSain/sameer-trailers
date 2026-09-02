@@ -4,28 +4,29 @@ import { Link } from 'react-router-dom';
 
 export const HeronInkIntroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState<number>(0.5);
+  const [progress, setProgress] = useState<number>(0);
+  const [activeSlide, setActiveSlide] = useState<number>(0);
 
   useEffect(() => {
     let rafId: number;
-    let targetP = 0.5;
-    let currentP = 0.5;
+    let targetP = 0;
+    let currentP = 0;
 
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Starts when section top enters from bottom (vh * 0.90)
-      // Completes when section is in upper half (vh * 0.20)
-      const start = vh * 0.90;
+      // Start transition when container is 85% into viewport from bottom
+      // Complete transition when container is 25% from top
+      const start = vh * 0.85;
       const end = vh * 0.20;
       const raw = (start - rect.top) / (start - end);
       targetP = Math.max(0, Math.min(1, raw));
     };
 
     const loop = () => {
-      currentP += (targetP - currentP) * 0.12;
+      currentP += (targetP - currentP) * 0.15;
       setProgress(currentP);
       rafId = requestAnimationFrame(loop);
     };
@@ -42,12 +43,12 @@ export const HeronInkIntroSection: React.FC = () => {
     };
   }, []);
 
-  // Calculate mask path coordinates based on exact Heron AI formula
+  // Exact Heron AI formula:
   // Start: M 0 0 Q 500 0 1000 0 L 1000 0 L 0 0 Z
   // Final: M 0 1000 Q 500 1250 1000 1000 L 1000 0 L 0 0 Z
   const y = progress * 1000;
   const curve = Math.min(250, progress * 250);
-  const maskPathD = `M 0 ${y} Q 500 ${y + curve} 1000 ${y} L 1000 0 L 0 0 Z`;
+  const maskPathD = `M 0 ${y.toFixed(2)} Q 500 ${(y + curve).toFixed(2)} 1000 ${y.toFixed(2)} L 1000 0 L 0 0 Z`;
 
   const partnerLogos = [
     'TATA MOTORS FLEET',
@@ -58,184 +59,213 @@ export const HeronInkIntroSection: React.FC = () => {
     'VRL LOGISTICS'
   ];
 
+  const handlePrev = () => {
+    setActiveSlide((prev) => (prev > 0 ? prev - 1 : partnerLogos.length - 1));
+  };
+
+  const handleNext = () => {
+    setActiveSlide((prev) => (prev < partnerLogos.length - 1 ? prev + 1 : 0));
+  };
+
   return (
-    <section ref={containerRef} className="py-20 md:py-28 bg-[#FFFBF7] border-y border-[#EFE8DF] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+    <div className="home-intro-wrap relative bg-[#FAF8F5] border-y border-[#EAE3D9] overflow-hidden py-16 md:py-24">
+      {/* Structural Hairline Grid Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(#CFC5B8_1px,transparent_1px)] [background-size:24px_24px]" />
+
+      <section ref={containerRef} className="home-intro relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-layout-blockcontainer container full-h grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           
           {/* ======================================================== */}
-          {/* LEFT: HERON AI EXACT INK-MASK DUAL LAYER VISUAL */}
+          {/* LEFT: EXACT HERON AI DUAL-LAYER INK MASK VISUAL */}
           {/* ======================================================== */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative w-full aspect-[1000/1012] max-w-[540px] mx-auto rounded-3xl overflow-hidden border border-[#EFE8DF] bg-white shadow-xl shadow-[#000000]/5">
-              
-              {/* Main Base Image: CAD Technical Wireframe */}
-              <div className="absolute inset-0">
-                <img
-                  src="/images/heron/cad-wireframe.avif"
-                  alt="Engineering CAD Blueprint"
-                  className="w-full h-full object-cover select-none pointer-events-none"
-                  loading="lazy"
-                />
-              </div>
+          <div className="lg:col-span-6 home-intro-img-wrap">
+            <div className="home-intro-img relative w-full aspect-[1000/1012] max-w-[540px] mx-auto rounded-3xl overflow-hidden border border-[#DFD7CB] bg-white shadow-2xl shadow-black/5">
+              <div data-wf--ink-mask--variant="path" className="ink-mask relative w-full h-full">
+                
+                {/* 1. Main Base Image: CAD Technical Wireframe */}
+                <div data-end="55" data-start="35" className="ink-mask-img main absolute inset-0">
+                  <img
+                    src="/images/heron/cad-wireframe.avif"
+                    alt="Technical Engineering CAD Wireframe"
+                    className="img-basic img-abs w-full h-full object-cover select-none pointer-events-none"
+                    loading="lazy"
+                  />
+                </div>
 
-              {/* Sub Layer: Revealed via Heron AI exact SVG Ink Mask */}
-              <div className="absolute inset-0">
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 1000 1011.7647058823529"
-                  preserveAspectRatio="none"
-                  className="w-full h-full overflow-visible"
-                >
-                  <defs>
-                    {/* Exact Heron AI Displacement Filter with Bold Particle Scale */}
-                    <filter
-                      id="sharedDisplacementFilter_showcase"
-                      x="-30%"
-                      y="-30%"
-                      width="160%"
-                      height="160%"
-                      filterUnits="userSpaceOnUse"
-                    >
-                      <feTurbulence
-                        type="fractalNoise"
-                        baseFrequency="0.022 0.028"
-                        numOctaves={4}
-                        seed={5}
-                        result="noise"
-                      />
-                      <feDisplacementMap
-                        in="SourceGraphic"
-                        in2="noise"
-                        scale={180}
-                        xChannelSelector="R"
-                        yChannelSelector="G"
-                        result="displaced"
-                      />
-                      <feGaussianBlur
-                        in="displaced"
-                        stdDeviation={2.0}
-                        result="blurred"
-                      />
-                      <feComponentTransfer
-                        in="blurred"
-                        result="contrast"
-                      >
-                        <feFuncA type="linear" slope={2.6} intercept={-0.7} />
-                      </feComponentTransfer>
-                    </filter>
-
-                    {/* Ink Mask with Detached Splash Droplets */}
-                    <mask
-                      id="inkCircleMask_showcase"
-                      maskContentUnits="userSpaceOnUse"
-                    >
-                      <g style={{ filter: 'url(#sharedDisplacementFilter_showcase)' }}>
-                        <path
-                          fill="white"
-                          d={maskPathD}
-                        />
-                        {/* Flying ink particle droplets */}
-                        <circle cx="250" cy={y + 120} r="35" fill="white" />
-                        <circle cx="750" cy={y + 130} r="40" fill="white" />
-                        <circle cx="500" cy={y + 200} r="32" fill="white" />
-                        <circle cx="380" cy={y + 160} r="25" fill="white" />
-                        <circle cx="620" cy={y + 170} r="28" fill="white" />
-                      </g>
-                    </mask>
-                  </defs>
-
-                  {/* Sub Image: With Radiant Orange Sun Circle */}
-                  <image
-                    href="/images/heron/cad-sun.avif"
-                    x="0"
-                    y="0"
+                {/* 2. Sub Layer: Exact Heron AI SVG Displacement Mask */}
+                <div className="ink-mask-img sub ink-filter absolute inset-0">
+                  <svg
                     width="100%"
                     height="100%"
-                    mask="url(#inkCircleMask_showcase)"
-                    className="w-full h-full object-cover select-none"
-                  />
-                </svg>
+                    preserveAspectRatio="none"
+                    className="layer w-full h-full overflow-visible"
+                    viewBox="0 0 1000 1011.7647058823529"
+                  >
+                    <defs>
+                      <mask id="inkCircleMask-0" maskContentUnits="userSpaceOnUse">
+                        <path
+                          fill="white"
+                          style={{ filter: 'url(#sharedDisplacementFilter)' }}
+                          d={maskPathD}
+                          data-value-final="M 0 1000 Q 500 1250 1000 1000 L 1000 0 L 0 0 Z"
+                          className="mask"
+                        />
+                      </mask>
+
+                      {/* Exact Heron AI Displacement Filter Formula */}
+                      <filter id="sharedDisplacementFilter">
+                        <feTurbulence
+                          type="fractalNoise"
+                          baseFrequency="0.045 0.055"
+                          numOctaves={4}
+                          seed={5}
+                          result="noise"
+                        />
+                        <feDisplacementMap
+                          in="SourceGraphic"
+                          in2="noise"
+                          scale={100}
+                          xChannelSelector="R"
+                          yChannelSelector="G"
+                        />
+                        <feGaussianBlur stdDeviation="1.8" result="blurred" />
+                        <feComponentTransfer in="blurred" result="contrast">
+                          <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+                        </feComponentTransfer>
+                      </filter>
+                    </defs>
+
+                    {/* Sub Image: Revealed with Glowing Radiant Sun */}
+                    <image
+                      href="/images/heron/cad-sun.avif"
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      mask="url(#inkCircleMask-0)"
+                      className="img-basic w-full h-full object-cover select-none"
+                      style={{ maskImage: 'url("#inkCircleMask-0")' }}
+                    />
+                  </svg>
+                </div>
+
               </div>
 
-              {/* Subtle Hairline Technical Metadata */}
-              <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-[#EFE8DF] shadow-sm">
+              {/* Technical HUD Floating Badge */}
+              <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#E5E0D8] shadow-sm pointer-events-none">
                 <span className="w-2 h-2 rounded-full bg-[#F68722] animate-pulse" />
                 <span className="text-[10px] font-mono-specs font-bold text-[#3B3A3A] tracking-wider uppercase">
-                  FEA STRESS DISSOLVE • {Math.round(progress * 100)}%
+                  METALLURGIC CAD STRESS INK DISSOLVE • {Math.round(progress * 100)}%
                 </span>
               </div>
             </div>
           </div>
 
           {/* ======================================================== */}
-          {/* RIGHT: HERON AI SIGNATURE EDITORIAL TYPOGRAPHY & LOGOS */}
+          {/* RIGHT: EXACT HERON AI EDITORIAL TYPOGRAPHY & BUTTON */}
           {/* ======================================================== */}
-          <div className="lg:col-span-6 space-y-8">
-            
-            {/* Tagline */}
-            <span className="text-xs font-black text-[#F68722] font-mono-specs uppercase tracking-[0.25em] block">
-              PRECISION COMMERCIAL TRANSPORTATION
-            </span>
-
-            {/* Massive Swiss Grotesque Headline */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#282828] font-heading leading-[1.25] tracking-tight uppercase">
-              THE REPETITIVE 50-TON HAULS SHOULDN'T EAT YOUR FLEET'S MARGINS. SAMEER TRAILER HANDLES THE EXTREME AXLE STRESS SO YOU STAY FOCUSED ON LOGISTICS, NOT BREAKDOWNS.
-            </h2>
-
-            {/* Heron Style Interactive Button */}
-            <div className="pt-2">
-              <Link
-                to="/products"
-                className="group inline-flex items-center gap-3 px-6 py-3.5 rounded-full border border-[#282828] hover:bg-[#282828] hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
-              >
-                <span className="text-xs font-black uppercase font-mono-specs tracking-wider group-hover:text-white transition-colors">
-                  EXPLORE FLEET MODELS
+          <div className="lg:col-span-6 home-intro-body space-y-8">
+            <div className="home-intro-content space-y-6">
+              
+              {/* Mono Subtitle */}
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#F68722]" />
+                <span className="text-xs font-black text-[#F68722] font-mono-specs uppercase tracking-[0.25em]">
+                  SAMEER COMMERCIAL TRANSPORT
                 </span>
-                <div className="w-6 h-6 rounded-full bg-[#F68722] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
-              </Link>
+              </div>
+
+              {/* Massive Swiss Grotesque Headline */}
+              <div className="home-intro-content-title">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black text-[#282828] font-heading leading-[1.18] tracking-tight uppercase">
+                  THE REPETITIVE 50-TON HAULS SHOULDN'T EAT YOUR FLEET'S MARGINS. SAMEER HANDLES THE EXTREME AXLE STRESS SO YOU STAY FOCUSED ON BUSINESS, NOT BREAKDOWNS.
+                </h2>
+              </div>
+
+              {/* Signature Heron AI Double-Deck Sliding Button */}
+              <div className="pt-2">
+                <Link
+                  to="/products"
+                  className="home-intro-btn inline-block group cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-full border border-[#282828] px-7 py-3.5 bg-transparent group-hover:bg-[#282828] transition-colors duration-300 flex items-center gap-4 shadow-sm">
+                    {/* Double-Deck Sliding Label */}
+                    <div className="relative h-4 overflow-hidden font-mono-specs text-xs font-black uppercase tracking-wider">
+                      <div className="transform transition-transform duration-300 group-hover:-translate-y-full text-[#282828]">
+                        Learn more
+                      </div>
+                      <div className="absolute inset-0 transform translate-y-full transition-transform duration-300 group-hover:translate-y-0 text-white">
+                        Learn more
+                      </div>
+                    </div>
+
+                    {/* Arrow Icon */}
+                    <div className="w-5 h-5 rounded-full bg-[#F68722] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform duration-300">
+                      <ArrowRight className="w-3 h-3" />
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
             </div>
 
-            {/* Bottom Partners Section (Heron AI Style) */}
-            <div className="pt-6 border-t border-[#EFE8DF] space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono-specs font-bold text-[#736F6A] uppercase tracking-wider">
-                  FLEET PARTNERS & COMPATIBILITY
-                </span>
-                <div className="flex items-center gap-1.5 text-[#736F6A]">
-                  <button className="p-1 rounded hover:bg-white border border-[#EFE8DF] transition-colors">
+            {/* ======================================================== */}
+            {/* PARTNER SWIPER STRIP (EXACT HERON AI LAYOUT) */}
+            {/* ======================================================== */}
+            <div className="home-intro-partner-wrap pt-6 border-t border-[#EAE3D9] space-y-4">
+              <div className="home-intro-partner-label-wrap flex items-center justify-between">
+                <div className="text-[11px] font-mono-specs font-bold text-[#736F6A] uppercase tracking-wider flex items-center gap-2">
+                  <span>CLIENTS & PRIME-MOVER COMPATIBILITY</span>
+                </div>
+                
+                {/* Prev / Next Slider Controls */}
+                <div className="home-intro-partner-ctrls flex items-center gap-1.5">
+                  <button
+                    onClick={handlePrev}
+                    aria-label="Previous partner slide"
+                    className="p-1.5 rounded-lg border border-[#DFD7CB] bg-white text-[#3B3A3A] hover:bg-[#F68722] hover:text-white hover:border-[#F68722] transition-colors shadow-2xs"
+                  >
                     <ChevronLeft className="w-3.5 h-3.5" />
                   </button>
-                  <button className="p-1 rounded hover:bg-white border border-[#EFE8DF] transition-colors">
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next partner slide"
+                    className="p-1.5 rounded-lg border border-[#DFD7CB] bg-white text-[#3B3A3A] hover:bg-[#F68722] hover:text-white hover:border-[#F68722] transition-colors shadow-2xs"
+                  >
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
 
-              {/* Partner Badges */}
+              {/* Partner Badges Carousel */}
               <div className="flex flex-wrap gap-2 pt-1">
-                {partnerLogos.map((p, i) => (
+                {partnerLogos.map((logo, idx) => (
                   <span
-                    key={i}
-                    className="px-3 py-1.5 text-[10px] font-black font-mono-specs uppercase rounded-lg bg-white border border-[#EFE8DF] text-[#3B3A3A] shadow-2xs"
+                    key={idx}
+                    className={`px-3.5 py-1.5 text-[10px] font-black font-mono-specs uppercase rounded-lg border transition-all duration-300 ${
+                      idx === activeSlide
+                        ? 'bg-[#282828] text-white border-[#282828] shadow-sm scale-[1.03]'
+                        : 'bg-white text-[#3B3A3A] border-[#DFD7CB] hover:border-[#F68722]'
+                    }`}
                   >
-                    {p}
+                    {logo}
                   </span>
                 ))}
               </div>
 
-              <p className="text-xs text-[#736F6A] font-mono-specs pt-2">
-                Works seamlessly across all Indian freight corridors, fully certified under CMVR and AIS-113 safety codes.
-              </p>
+              {/* Descriptive Subtext */}
+              <div className="home-intro-desc pt-2">
+                <p className="text-xs text-[#736F6A] font-mono-specs leading-relaxed">
+                  Works natively inside all heavy fleet setups across India, compatible with Tata Motors, Ashok Leyland, BharatBenz and Mahindra prime movers.
+                </p>
+              </div>
             </div>
 
           </div>
 
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
+

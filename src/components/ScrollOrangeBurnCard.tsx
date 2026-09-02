@@ -72,78 +72,77 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
   // Derive unique deterministic variant & seed for each card so NO TWO CARDS LOOK ALIKE!
-  // Completely eliminates the repetitive symmetrical loop and matches the reference closeup
+  // Completely eliminates repetitive loops and creates natural, organic clouds
   const hash = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const cardSeed = (hash % 19) + 2;
+  const cardSeed = (hash % 23) + 3;
   const variant = hash % 4;
 
-  // Asymmetric detached droplets floating ahead of the straight horizontal advancing edge
-  // (Matches the exact Heron AI reference closeup with detached floating islands)
-  const dropletPresets = [
-    // Variant 0: Left & center clusters with drifting drops on right
+  // Soft billowing cumulus cloud presets (overlapping large puffs + detached wisps)
+  // Low frequency + soft feathering = true cloud feel, ZERO scratches!
+  const cloudPresets = [
+    // Variant 0: Rolling cloud front with center-left puffs and drifting wisps
     [
-      { cx: 120, dy: 45, r: 34 },
-      { cx: 170, dy: 95, r: 42 },
-      { cx: 140, dy: 155, r: 26 },
-      { cx: 230, dy: 60, r: 24 },
-      { cx: 410, dy: 50, r: 38 },
-      { cx: 470, dy: 110, r: 46 },
-      { cx: 520, dy: 170, r: 28 },
-      { cx: 580, dy: 75, r: 32 },
-      { cx: 740, dy: 45, r: 26 },
-      { cx: 810, dy: 100, r: 36 },
-      { cx: 860, dy: 160, r: 22 },
-      { cx: 920, dy: 60, r: 18 }
+      { cx: 120, dy: 35, r: 85 },
+      { cx: 240, dy: 65, r: 105 },
+      { cx: 410, dy: 50, r: 115 },
+      { cx: 580, dy: 70, r: 100 },
+      { cx: 760, dy: 40, r: 90 },
+      { cx: 910, dy: 55, r: 80 },
+      // Detached floating cloud wisps
+      { cx: 280, dy: 130, r: 55 },
+      { cx: 490, dy: 150, r: 65 },
+      { cx: 710, dy: 120, r: 50 },
+      { cx: 520, dy: 210, r: 40 }
     ],
-    // Variant 1: Dense center drops with deep floating splatter dots
+    // Variant 1: Dense center-right cloud billowing downward
     [
-      { cx: 180, dy: 55, r: 26 },
-      { cx: 290, dy: 90, r: 34 },
-      { cx: 340, dy: 150, r: 28 },
-      { cx: 480, dy: 60, r: 42 },
-      { cx: 540, dy: 125, r: 50 },
-      { cx: 510, dy: 195, r: 30 },
-      { cx: 620, dy: 70, r: 38 },
-      { cx: 680, dy: 135, r: 36 },
-      { cx: 750, dy: 190, r: 24 },
-      { cx: 830, dy: 50, r: 22 },
-      { cx: 900, dy: 80, r: 20 }
+      { cx: 100, dy: 45, r: 80 },
+      { cx: 260, dy: 40, r: 90 },
+      { cx: 430, dy: 75, r: 110 },
+      { cx: 620, dy: 80, r: 120 },
+      { cx: 800, dy: 55, r: 95 },
+      { cx: 930, dy: 40, r: 75 },
+      // Detached floating cloud wisps
+      { cx: 380, dy: 140, r: 55 },
+      { cx: 590, dy: 165, r: 65 },
+      { cx: 770, dy: 135, r: 50 },
+      { cx: 630, dy: 220, r: 42 }
     ],
-    // Variant 2: Left-heavy cascade with deep floating dots
+    // Variant 2: Left-leaning cloud cascade
     [
-      { cx: 90, dy: 60, r: 24 },
-      { cx: 140, dy: 115, r: 40 },
-      { cx: 210, dy: 70, r: 36 },
-      { cx: 190, dy: 170, r: 28 },
-      { cx: 270, dy: 125, r: 32 },
-      { cx: 410, dy: 65, r: 30 },
-      { cx: 470, dy: 120, r: 38 },
-      { cx: 600, dy: 50, r: 26 },
-      { cx: 720, dy: 85, r: 34 },
-      { cx: 780, dy: 155, r: 24 },
-      { cx: 880, dy: 60, r: 20 }
+      { cx: 110, dy: 70, r: 110 },
+      { cx: 270, dy: 65, r: 105 },
+      { cx: 440, dy: 45, r: 95 },
+      { cx: 610, dy: 50, r: 90 },
+      { cx: 780, dy: 40, r: 85 },
+      { cx: 920, dy: 45, r: 75 },
+      // Detached floating cloud wisps
+      { cx: 180, dy: 155, r: 60 },
+      { cx: 350, dy: 135, r: 55 },
+      { cx: 530, dy: 125, r: 48 },
+      { cx: 240, dy: 215, r: 40 }
     ],
-    // Variant 3: Right-heavy cascade with isolated organic islands
+    // Variant 3: Double-billow cloud formation
     [
-      { cx: 150, dy: 45, r: 22 },
-      { cx: 260, dy: 60, r: 28 },
-      { cx: 390, dy: 75, r: 32 },
-      { cx: 520, dy: 55, r: 30 },
-      { cx: 610, dy: 105, r: 40 },
-      { cx: 670, dy: 170, r: 32 },
-      { cx: 750, dy: 70, r: 44 },
-      { cx: 820, dy: 135, r: 48 },
-      { cx: 790, dy: 205, r: 26 },
-      { cx: 900, dy: 80, r: 30 },
-      { cx: 940, dy: 145, r: 20 }
+      { cx: 140, dy: 55, r: 95 },
+      { cx: 300, dy: 70, r: 110 },
+      { cx: 470, dy: 45, r: 85 },
+      { cx: 650, dy: 70, r: 115 },
+      { cx: 820, dy: 60, r: 100 },
+      { cx: 930, dy: 40, r: 75 },
+      // Detached floating cloud wisps
+      { cx: 330, dy: 150, r: 60 },
+      { cx: 670, dy: 155, r: 65 },
+      { cx: 500, dy: 120, r: 45 },
+      { cx: 350, dy: 210, r: 38 }
     ]
   ];
 
-  const droplets = dropletPresets[variant];
+  const cloudPuffs = cloudPresets[variant];
 
-  // Straight horizontal progression:
-  // Starts with all droplets above the card (y = -260), finishes past the bottom (y = 1050)
-  const y = -260 + effectiveProgress * 1310;
+  // Soft rolling cloud coordinates:
+  // Starts with all cloud puffs safely above the card (y = -320), finishes past bottom (y = 1100)
+  const y = -320 + effectiveProgress * 1420;
 
   // Smooth feathered text reveal percentage (completely eliminates hard cut lines)
   const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
@@ -193,8 +192,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. STRAIGHT ADVANCING FRONT WITH DETACHED INK DROPLETS */}
-      {/* Exact Heron AI reference filter + asymmetric floating droplets */}
+      {/* 2. REAL SOFT BILLOWING CLOUD MASK (NO SCRATCHES, NO FLAT LINE) */}
+      {/* Low frequency (0.004) + stdDev 7.5 = True Soft Puffy Cloud */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -204,55 +203,55 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
         <defs>
           <filter
             id={filterId}
-            x="-30%"
-            y="-30%"
-            width="160%"
-            height="160%"
+            x="-35%"
+            y="-35%"
+            width="170%"
+            height="170%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Exact Heron AI Displacement Filter */}
+            {/* Real Soft Puffy Cloud Filter - Low frequency, NO scratches, High blur */}
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.038 0.046"
-              numOctaves={4}
+              baseFrequency="0.004 0.006"
+              numOctaves={2}
               seed={cardSeed}
-              result="noise"
+              result="cloudNoise"
             />
             <feDisplacementMap
               in="SourceGraphic"
-              in2="noise"
-              scale={105}
+              in2="cloudNoise"
+              scale={85}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={1.8}
+              stdDeviation={7.5}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+              <feFuncA type="linear" slope={2.5} intercept={-0.7} />
             </feComponentTransfer>
           </filter>
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
-              {/* Straight horizontal advancing fill (NO curve/bowl!) */}
+              {/* Base Upper Inflow */}
               <path
                 fill="white"
                 d={`M -100 -100 L 1100 -100 L 1100 ${y} L -100 ${y} Z`}
               />
-              {/* Asymmetric detached ink droplets floating ahead of the straight front */}
-              {droplets.map((d, i) => (
+              {/* Overlapping billowing cloud lobes & floating wisps (Multi-depth cloud) */}
+              {cloudPuffs.map((puff, i) => (
                 <circle
                   key={i}
-                  cx={d.cx}
-                  cy={y + d.dy}
-                  r={d.r}
+                  cx={puff.cx}
+                  cy={y + puff.dy}
+                  r={puff.r}
                   fill="white"
                 />
               ))}
@@ -260,7 +259,7 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
           </mask>
         </defs>
 
-        {/* Solid Brand Orange rectangle revealed by the organic ink mask */}
+        {/* Solid Brand Orange rectangle revealed by the soft cloud mask */}
         <rect
           width="1000"
           height="1000"
@@ -270,13 +269,13 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </svg>
 
       {/* ======================================================== */}
-      {/* 3. PURE WHITE TEXT OVERLAY LAYER (SMOOTH FEATHERED REVEAL) */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER (SOFT FEATHERED REVEAL) */}
       {/* ======================================================== */}
       <div
         className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-200 ease-out"
         style={{
-          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 12)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 18)}%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 12)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 18)}%)`,
+          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 15)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 22)}%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 15)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 22)}%)`,
           opacity: effectiveProgress > 0.02 ? 1 : 0
         }}
       >

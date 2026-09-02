@@ -103,7 +103,7 @@ export const HeroTrailerParallax: React.FC = () => {
           y: useTransform(bgY, (val) => val + idleBgY),
           translateY: scrollBgY
         }}
-        className="absolute inset-0 bg-[#F68722] rounded-3xl translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-6 group-hover:translate-y-6 transition-all duration-300 -z-10 shadow-xl shadow-[#F68722]/30"
+        className="absolute inset-0 bg-[#F68722] rounded-2xl sm:rounded-3xl translate-x-2.5 translate-y-2.5 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-300 -z-10 shadow-xl shadow-[#F68722]/30"
       />
 
       {/* 2. LAYER 2: FOREGROUND CARD CONTAINER WITH 3D PERSPECTIVE TILT */}
@@ -117,7 +117,7 @@ export const HeroTrailerParallax: React.FC = () => {
           rotateZ: scrollRotate,
           transformStyle: 'preserve-3d'
         }}
-        className="relative w-full bg-white rounded-3xl p-3 sm:p-5 border-2 border-[#EFE8DF] overflow-hidden group-hover:border-[#F68722]/50 shadow-2xl transition-colors duration-300 flex items-center justify-center min-h-[340px] sm:min-h-[420px]"
+        className="relative w-full bg-white rounded-2xl sm:rounded-3xl p-1.5 sm:p-2.5 border-2 sm:border-[3px] border-[#EFE8DF] overflow-hidden group-hover:border-[#F68722]/50 shadow-2xl transition-colors duration-300 flex items-center justify-center"
       >
         {/* Subtle Dynamic Specular Light Glare following mouse */}
         <motion.div
@@ -129,7 +129,7 @@ export const HeroTrailerParallax: React.FC = () => {
           className="absolute -inset-full bg-gradient-to-tr from-transparent via-white/80 to-transparent pointer-events-none -z-0 blur-xl"
         />
 
-        {/* 3. LAYER 3: HIGH-RESOLUTION BROCHURE TRAILER IMAGE (Independent Floating Depth) */}
+        {/* 3. LAYER 3: HIGH-RESOLUTION BROCHURE TRAILER IMAGE (Snug Edge-to-Edge Fit) */}
         <motion.img
           src="/assets/brochure-asset-21.png"
           alt="Sameer Commercial Trailer — Engineered Heavy Transport"
@@ -138,11 +138,8 @@ export const HeroTrailerParallax: React.FC = () => {
             y: imgY,
             translateZ: 25
           }}
-          className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain rounded-2xl scale-[1.06] sm:scale-[1.10] group-hover:scale-[1.13] transition-transform duration-500 drop-shadow-2xl relative z-10 pointer-events-none"
+          className="w-full h-auto object-cover rounded-xl sm:rounded-2xl drop-shadow-md relative z-10 pointer-events-none block"
         />
-
-        {/* Subtle Bottom Ground Shadow under trailer */}
-        <div className="absolute bottom-4 inset-x-8 h-6 bg-black/10 blur-md rounded-full pointer-events-none -z-0" />
       </motion.div>
     </div>
   );

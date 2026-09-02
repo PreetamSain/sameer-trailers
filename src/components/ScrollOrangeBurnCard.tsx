@@ -71,105 +71,70 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // Effective progress: hover ignites the card to 100%
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
-  // Derive unique deterministic variant & seed for each card so NO TWO CARDS LOOK ALIKE!
-  // Completely eliminates repetitive loops and creates natural, organic clouds
+  // Derive unique deterministic seed for each card
   const hash = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const cardSeed = (hash % 23) + 3;
-  const variant = hash % 4;
 
-  // Soft billowing cumulus cloud presets (overlapping large puffs + detached wisps)
-  // Low frequency + soft feathering = true cloud feel, ZERO scratches!
-  const cloudPresets = [
-    // Variant 0: Rolling cloud front with center-left puffs and drifting wisps
-    [
-      { cx: 120, dy: 35, r: 85 },
-      { cx: 240, dy: 65, r: 105 },
-      { cx: 410, dy: 50, r: 115 },
-      { cx: 580, dy: 70, r: 100 },
-      { cx: 760, dy: 40, r: 90 },
-      { cx: 910, dy: 55, r: 80 },
-      // Detached floating cloud wisps
-      { cx: 280, dy: 130, r: 55 },
-      { cx: 490, dy: 150, r: 65 },
-      { cx: 710, dy: 120, r: 50 },
-      { cx: 520, dy: 210, r: 40 }
-    ],
-    // Variant 1: Dense center-right cloud billowing downward
-    [
-      { cx: 100, dy: 45, r: 80 },
-      { cx: 260, dy: 40, r: 90 },
-      { cx: 430, dy: 75, r: 110 },
-      { cx: 620, dy: 80, r: 120 },
-      { cx: 800, dy: 55, r: 95 },
-      { cx: 930, dy: 40, r: 75 },
-      // Detached floating cloud wisps
-      { cx: 380, dy: 140, r: 55 },
-      { cx: 590, dy: 165, r: 65 },
-      { cx: 770, dy: 135, r: 50 },
-      { cx: 630, dy: 220, r: 42 }
-    ],
-    // Variant 2: Left-leaning cloud cascade
-    [
-      { cx: 110, dy: 70, r: 110 },
-      { cx: 270, dy: 65, r: 105 },
-      { cx: 440, dy: 45, r: 95 },
-      { cx: 610, dy: 50, r: 90 },
-      { cx: 780, dy: 40, r: 85 },
-      { cx: 920, dy: 45, r: 75 },
-      // Detached floating cloud wisps
-      { cx: 180, dy: 155, r: 60 },
-      { cx: 350, dy: 135, r: 55 },
-      { cx: 530, dy: 125, r: 48 },
-      { cx: 240, dy: 215, r: 40 }
-    ],
-    // Variant 3: Double-billow cloud formation
-    [
-      { cx: 140, dy: 55, r: 95 },
-      { cx: 300, dy: 70, r: 110 },
-      { cx: 470, dy: 45, r: 85 },
-      { cx: 650, dy: 70, r: 115 },
-      { cx: 820, dy: 60, r: 100 },
-      { cx: 930, dy: 40, r: 75 },
-      // Detached floating cloud wisps
-      { cx: 330, dy: 150, r: 60 },
-      { cx: 670, dy: 155, r: 65 },
-      { cx: 500, dy: 120, r: 45 },
-      { cx: 350, dy: 210, r: 38 }
-    ]
+  // ========================================================
+  // IN-PLACE CLOUD BLOOMING & ACCUMULATION (अपनी जगह पर खिलना और जुड़ना)
+  // No part slides forward! Each cloud puff is fixed in its place (cx, cy).
+  // It blooms in place, merges into the descending mass, and new puffs
+  // appear lower down and bloom in place, growing the cloud downwards.
+  // ========================================================
+  const p = Math.max(0, Math.min(1, effectiveProgress));
+
+  // The base continuous mass accumulating from top to bottom
+  const ceilingY = -140 + p * 1240;
+  const baseCeilingD = `M -100 -200 L 1100 -200 L 1100 ${ceilingY.toFixed(1)} L -100 ${ceilingY.toFixed(1)} Z`;
+
+  // Fixed constellation of in-place blooming cloud nodes
+  // Seeded per card so every card has its own custom, organic cloud pattern!
+  const s = cardSeed * 13;
+  const cardNodes = [
+    // Top Band (0% - 25% scroll)
+    { cx: 220 + ((s * 7) % 60) - 30, cy: 120, maxR: 150, startP: 0.00, fullP: 0.18 },
+    { cx: 500 + ((s * 3) % 60) - 30, cy: 90,  maxR: 160, startP: 0.02, fullP: 0.20 },
+    { cx: 780 + ((s * 5) % 60) - 30, cy: 140, maxR: 150, startP: 0.04, fullP: 0.22 },
+    { cx: 380 + ((s * 9) % 60) - 30, cy: 220, maxR: 170, startP: 0.08, fullP: 0.26 },
+    { cx: 640 + ((s * 11) % 60) - 30, cy: 240, maxR: 160, startP: 0.10, fullP: 0.28 },
+
+    // Upper-Mid Band (20% - 52% scroll)
+    { cx: 160 + ((s * 4) % 60) - 30, cy: 380, maxR: 160, startP: 0.18, fullP: 0.38 },
+    { cx: 840 + ((s * 8) % 60) - 30, cy: 360, maxR: 150, startP: 0.20, fullP: 0.40 },
+    { cx: 460 + ((s * 6) % 60) - 30, cy: 410, maxR: 180, startP: 0.24, fullP: 0.44 },
+    { cx: 680 + ((s * 2) % 60) - 30, cy: 460, maxR: 170, startP: 0.28, fullP: 0.48 },
+    { cx: 290 + ((s * 13) % 60) - 30, cy: 490, maxR: 165, startP: 0.32, fullP: 0.52 },
+
+    // Lower-Mid Band (42% - 75% scroll)
+    { cx: 140 + ((s * 5) % 60) - 30, cy: 620, maxR: 155, startP: 0.42, fullP: 0.62 },
+    { cx: 520 + ((s * 7) % 60) - 30, cy: 610, maxR: 185, startP: 0.46, fullP: 0.66 },
+    { cx: 790 + ((s * 9) % 60) - 30, cy: 640, maxR: 175, startP: 0.50, fullP: 0.70 },
+    { cx: 350 + ((s * 3) % 60) - 30, cy: 690, maxR: 170, startP: 0.54, fullP: 0.74 },
+    { cx: 660 + ((s * 11) % 60) - 30, cy: 720, maxR: 165, startP: 0.58, fullP: 0.78 },
+
+    // Bottom Band (65% - 100% scroll)
+    { cx: 200 + ((s * 2) % 60) - 30, cy: 840, maxR: 170, startP: 0.64, fullP: 0.84 },
+    { cx: 480 + ((s * 6) % 60) - 30, cy: 830, maxR: 190, startP: 0.68, fullP: 0.88 },
+    { cx: 780 + ((s * 4) % 60) - 30, cy: 860, maxR: 175, startP: 0.72, fullP: 0.92 },
+    { cx: 360 + ((s * 8) % 60) - 30, cy: 940, maxR: 180, startP: 0.76, fullP: 0.96 },
+    { cx: 620 + ((s * 10) % 60) - 30, cy: 950, maxR: 185, startP: 0.78, fullP: 0.98 },
+    { cx: 500, cy: 1020, maxR: 200, startP: 0.80, fullP: 1.00 }
   ];
 
-  const p = Math.max(0, Math.min(1, effectiveProgress));
-  const y = -180 + p * 1360;
+  // Calculate in-place expansion for each fixed node
+  const activeBlooms = cardNodes.map((node) => {
+    if (p < node.startP) return null;
+    const localT = Math.min(1, (p - node.startP) / (node.fullP - node.startP));
+    const scale = localT * (2 - localT);
+    return {
+      cx: node.cx,
+      cy: node.cy,
+      r: node.maxR * scale
+    };
+  }).filter((n): n is { cx: number; cy: number; r: number } => n !== null);
 
-  // Unpredictable multi-harmonic crests and deep voids (kabhi kahi hai, kabhi kahi nahi hai)
-  // Each card has its own custom seed and phase offset so every card's cloud is unique!
-  const phase = (cardSeed * 0.73) % 6.28;
-  const c1 = Math.sin(p * 5.1 + phase + 0.8) * 85 + 35;
-  const c2 = -Math.cos(p * 3.7 + phase + 1.2) * 95 - 45; // deep void
-  const c3 = Math.sin(p * 3.2 + phase + 2.5) * 145 + 85; // surging cloud lobe
-  const c4 = Math.cos(p * 4.3 + phase + 0.5) * 115 + 40;
-  const c5 = -Math.sin(p * 4.8 + phase + 1.9) * 85 - 35; // deep void
-  const c6 = Math.sin(p * 2.9 + phase + 1.1) * 100 + 50;
-
-  // Complex organic undulating perimeter (Never a simple bubble parabola)
-  const cloudContourD =
-    `M -150 -200 L 1150 -200 L 1150 ${(y - 120).toFixed(1)} ` +
-    `Q 1000 ${(y + c1).toFixed(1)} 850 ${(y + c2).toFixed(1)} ` +
-    `Q 700 ${(y + c3).toFixed(1)} 550 ${(y + c4).toFixed(1)} ` +
-    `Q 400 ${(y + c5).toFixed(1)} 250 ${(y + c6).toFixed(1)} ` +
-    `Q 100 ${(y + c1).toFixed(1)} -150 ${y.toFixed(1)} Z`;
-
-  // Detached, unpredictable floating cloud islands (kabhi kahi hai, kabhi kahi nahi hai)
-  const cloudIslands = p > 0.04 && p < 0.96 ? [
-    { cx: 280, cy: y + 175 + Math.sin(p * 7 + phase) * 45, r: 80 + Math.cos(p * 6) * 20 },
-    { cx: 720, cy: y + 235 + Math.cos(p * 6 + phase) * 55, r: 98 + Math.sin(p * 5) * 25 },
-    { cx: 510, cy: y + 275 + Math.sin(p * 8 + phase) * 40, r: 68 + Math.sin(p * 7) * 18 },
-    { cx: 140, cy: y + 145 + Math.cos(p * 9 + phase) * 35, r: 62 },
-    { cx: 890, cy: y + 165 + Math.sin(p * 5 + phase) * 40, r: 72 },
-  ] : [];
-
-  // Smooth feathered text reveal percentage (completely eliminates hard cut lines)
-  const textRevealPos = Math.max(0, Math.min(100, effectiveProgress * 100));
+  // Smooth feathered text reveal percentage
+  const textRevealPos = Math.max(0, Math.min(1, effectiveProgress * 100));
 
   return (
     <div
@@ -216,8 +181,7 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. REAL UNPREDICTABLE BILLOWING CLOUD MASK (NO BUBBLE, NO SCRATCHES) */}
-      {/* Multi-harmonic crests + deep voids + floating islands */}
+      {/* 2. IN-PLACE BLOOMING CLOUD MASK (NO SLIDING FORWARD) */}
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
@@ -233,7 +197,7 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             height="170%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Real Soft Puffy Cloud Filter - Medium-low frequency, NO scratches, High vapor haze */}
+            {/* Real Soft Puffy Cloud Filter */}
             <feTurbulence
               type="fractalNoise"
               baseFrequency="0.010 0.014"
@@ -264,16 +228,18 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
+              {/* Continuous ceiling accumulating downwards */}
               <path
                 fill="white"
-                d={cloudContourD}
+                d={baseCeilingD}
               />
-              {cloudIslands.map((island, idx) => (
+              {/* In-place blooming nodes */}
+              {activeBlooms.map((bloom, idx) => (
                 <circle
                   key={idx}
-                  cx={island.cx}
-                  cy={island.cy}
-                  r={island.r}
+                  cx={bloom.cx}
+                  cy={bloom.cy}
+                  r={bloom.r}
                   fill="white"
                 />
               ))}

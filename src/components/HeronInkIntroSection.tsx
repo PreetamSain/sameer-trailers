@@ -44,38 +44,61 @@ export const HeronInkIntroSection: React.FC = () => {
   }, []);
 
   // ========================================================
-  // UNPREDICTABLE BILLOWING CLOUD TRANSITION (बादल / धुंध)
-  // Eliminates bubble shape: asymmetric multi-harmonic crests,
-  // natural voids/gaps, and detached drifting cloud islands.
+  // IN-PLACE CLOUD BLOOMING & ACCUMULATION (अपनी जगह पर खिलना और जुड़ना)
+  // No part slides forward! Each cloud puff is fixed in its place (cx, cy).
+  // It blooms in place, merges into the descending mass, and new puffs
+  // appear lower down and bloom in place, growing the cloud downwards.
   // ========================================================
   const p = Math.max(0, Math.min(1, progress));
-  const y = -160 + p * 1320;
 
-  // Asymmetric multi-harmonic crests and deep receding voids (kabhi kahi hai, kabhi kahi nahi hai)
-  const c1 = Math.sin(p * 5.1 + 0.9) * 85 + 35;  // Left flank swell
-  const c2 = -Math.cos(p * 3.7 + 1.4) * 95 - 45; // Deep void / gap where cloud recedes
-  const c3 = Math.sin(p * 3.2 + 2.8) * 145 + 85; // Deep surging cloud head
-  const c4 = Math.cos(p * 4.3 + 0.6) * 115 + 40; // Right-center secondary puff
-  const c5 = -Math.sin(p * 4.8 + 2.1) * 85 - 35; // Secondary void / gap
-  const c6 = Math.sin(p * 2.9 + 1.2) * 100 + 50; // Far right trailing wisp
+  // The base continuous mass accumulating from top to bottom
+  const ceilingY = -140 + p * 1240;
+  const baseCeilingD = `M -100 -200 L 1100 -200 L 1100 ${ceilingY.toFixed(1)} L -100 ${ceilingY.toFixed(1)} Z`;
 
-  // Complex organic undulating perimeter (Never a simple bubble parabola)
-  const cloudContourD =
-    `M -150 -200 L 1150 -200 L 1150 ${(y - 120).toFixed(1)} ` +
-    `Q 1000 ${(y + c1).toFixed(1)} 850 ${(y + c2).toFixed(1)} ` +
-    `Q 700 ${(y + c3).toFixed(1)} 550 ${(y + c4).toFixed(1)} ` +
-    `Q 400 ${(y + c5).toFixed(1)} 250 ${(y + c6).toFixed(1)} ` +
-    `Q 100 ${(y + c1).toFixed(1)} -150 ${y.toFixed(1)} Z`;
+  // Fixed constellation of in-place blooming cloud nodes
+  const CLOUD_BLOOM_NODES = [
+    // Top Band (0% - 25% scroll)
+    { cx: 220, cy: 120, maxR: 150, startP: 0.00, fullP: 0.18 },
+    { cx: 500, cy: 90,  maxR: 160, startP: 0.02, fullP: 0.20 },
+    { cx: 780, cy: 140, maxR: 150, startP: 0.04, fullP: 0.22 },
+    { cx: 380, cy: 220, maxR: 170, startP: 0.08, fullP: 0.26 },
+    { cx: 640, cy: 240, maxR: 160, startP: 0.10, fullP: 0.28 },
 
-  // Detached, unpredictable floating cloud islands (kabhi kahi hai, kabhi kahi nahi hai)
-  const cloudIslands = p > 0.04 && p < 0.96 ? [
-    { cx: 280, cy: y + 175 + Math.sin(p * 7) * 45, r: 80 + Math.cos(p * 6) * 20 },
-    { cx: 720, cy: y + 235 + Math.cos(p * 6) * 55, r: 98 + Math.sin(p * 5) * 25 },
-    { cx: 510, cy: y + 275 + Math.sin(p * 8) * 40, r: 68 + Math.sin(p * 7) * 18 },
-    { cx: 140, cy: y + 145 + Math.cos(p * 9) * 35, r: 62 },
-    { cx: 890, cy: y + 165 + Math.sin(p * 5) * 40, r: 72 },
-    { cx: 390, cy: y + 215 + Math.sin(p * 9) * 30, r: 58 },
-  ] : [];
+    // Upper-Mid Band (20% - 52% scroll)
+    { cx: 160, cy: 380, maxR: 160, startP: 0.18, fullP: 0.38 },
+    { cx: 840, cy: 360, maxR: 150, startP: 0.20, fullP: 0.40 },
+    { cx: 460, cy: 410, maxR: 180, startP: 0.24, fullP: 0.44 },
+    { cx: 680, cy: 460, maxR: 170, startP: 0.28, fullP: 0.48 },
+    { cx: 290, cy: 490, maxR: 165, startP: 0.32, fullP: 0.52 },
+
+    // Lower-Mid Band (42% - 75% scroll)
+    { cx: 140, cy: 620, maxR: 155, startP: 0.42, fullP: 0.62 },
+    { cx: 520, cy: 610, maxR: 185, startP: 0.46, fullP: 0.66 },
+    { cx: 790, cy: 640, maxR: 175, startP: 0.50, fullP: 0.70 },
+    { cx: 350, cy: 690, maxR: 170, startP: 0.54, fullP: 0.74 },
+    { cx: 660, cy: 720, maxR: 165, startP: 0.58, fullP: 0.78 },
+
+    // Bottom Band (65% - 100% scroll)
+    { cx: 200, cy: 840, maxR: 170, startP: 0.64, fullP: 0.84 },
+    { cx: 480, cy: 830, maxR: 190, startP: 0.68, fullP: 0.88 },
+    { cx: 780, cy: 860, maxR: 175, startP: 0.72, fullP: 0.92 },
+    { cx: 360, cy: 940, maxR: 180, startP: 0.76, fullP: 0.96 },
+    { cx: 620, cy: 950, maxR: 185, startP: 0.78, fullP: 0.98 },
+    { cx: 500, cy: 1020, maxR: 200, startP: 0.80, fullP: 1.00 }
+  ];
+
+  // Calculate in-place expansion for each fixed node
+  const activeBlooms = CLOUD_BLOOM_NODES.map((node) => {
+    if (p < node.startP) return null;
+    const localT = Math.min(1, (p - node.startP) / (node.fullP - node.startP));
+    // Smooth organic easeOut
+    const scale = localT * (2 - localT);
+    return {
+      cx: node.cx,
+      cy: node.cy,
+      r: node.maxR * scale
+    };
+  }).filter((n): n is { cx: number; cy: number; r: number } => n !== null);
 
   const partnerLogos = [
     'TATA MOTORS FLEET',
@@ -131,17 +154,19 @@ export const HeronInkIntroSection: React.FC = () => {
                     <defs>
                       <mask id="inkCircleMask-0" maskContentUnits="userSpaceOnUse">
                         <g style={{ filter: 'url(#sharedDisplacementFilter)' }}>
+                          {/* Continuous ceiling accumulating downwards */}
                           <path
                             fill="white"
-                            d={cloudContourD}
+                            d={baseCeilingD}
                             className="mask"
                           />
-                          {cloudIslands.map((island, idx) => (
+                          {/* In-place blooming cloud nodes (fixed position, expanding outward in-place) */}
+                          {activeBlooms.map((bloom, idx) => (
                             <circle
                               key={idx}
-                              cx={island.cx}
-                              cy={island.cy}
-                              r={island.r}
+                              cx={bloom.cx}
+                              cy={bloom.cy}
+                              r={bloom.r}
                               fill="white"
                             />
                           ))}

@@ -30,6 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
+import { TrailerScrollStoryEngine } from '../components/TrailerScrollStoryEngine';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -225,6 +226,9 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
+
+      {/* 2.5. SCROLL-DRIVEN 3D CINEMATIC TRAILER ROTATION SHOWCASE */}
+      <TrailerScrollStoryEngine />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

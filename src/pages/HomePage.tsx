@@ -142,7 +142,7 @@ export const HomePage: React.FC = () => {
                 {/* 2. Main Foreground Image Container with transparent frame / hero image */}
                 <div className="relative w-full bg-white rounded-3xl p-3 sm:p-5 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center min-h-[340px] sm:min-h-[420px]">
                   <img
-                    src="/assets/trailer-frames-webp/frame_0001.webp"
+                    src="/assets/brochure-asset-21.png"
                     alt="Sameer Commercial Trailer — Engineered Heavy Transport"
                     className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain rounded-2xl scale-[1.06] sm:scale-[1.10] group-hover:scale-[1.14] transition-transform duration-500 drop-shadow-xl"
                   />

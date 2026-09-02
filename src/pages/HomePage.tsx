@@ -30,7 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
-import { TrailerScrollStoryEngine } from '../components/TrailerScrollStoryEngine';
+import { HeroScroll3DShowcase } from '../components/HeroScroll3DShowcase';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -61,98 +61,8 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FFFBF7]">
       
-      {/* 1. HERO SECTION WITH SUBTLE PARTICLES */}
-      <section className="relative pt-8 pb-16 md:pt-16 md:pb-24 overflow-hidden border-b border-[#EFE8DF]">
-        {/* Subtle, non-intrusive floating particle canvas */}
-        <HeroParticles />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            
-            {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-6 space-y-6"
-            >
-              <div className="text-xs sm:text-sm font-black text-[#3B3A3A] tracking-[0.25em] uppercase font-heading">
-                MADE IN INDIA
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#3B3A3A] tracking-tight leading-[1.06] font-heading">
-                BUILT TO PERFORM. <br />
-                <span className="text-[#F68722]">BUILT TO LAST.</span>
-              </h1>
-
-              <p className="text-sm sm:text-base text-[#736F6A] max-w-xl leading-relaxed font-medium">
-                We manufacture high-performance trailers designed to handle the toughest loads, harshest terrains, and longest hauls. When strength, safety, and reliability matter, our engineering delivers without compromise.
-              </p>
-
-              {/* CTAs (Only 2 Clean Action Buttons) */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link
-                  to="/products"
-                  className="py-3.5 px-8 bg-[#F68722] hover:bg-[#e07414] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-[#F68722]/25 hover:shadow-xl hover:shadow-[#F68722]/35 active:scale-95 transition-all group cursor-pointer"
-                >
-                  <span>Explore Products</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-
-                <Link
-                  to="/contact"
-                  className="py-3.5 px-8 bg-[#3B3A3A] hover:bg-[#222222] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-sm active:scale-95 transition-all cursor-pointer"
-                >
-                  <span>Request Quote</span>
-                </Link>
-              </div>
-
-              {/* Trust Badges with Animated Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[#EFE8DF] max-w-lg">
-                <div>
-                  <div className="text-sm font-black text-[#3B3A3A] font-mono-specs">ARAI AIS-113</div>
-                  <div className="text-[11px] text-[#736F6A]">100% Homologated</div>
-                </div>
-                <div>
-                  <div className="text-sm font-black text-[#F68722] font-mono-specs">
-                    <AnimatedCounter end={700} suffix=" MPa" />
-                  </div>
-                  <div className="text-[11px] text-[#736F6A]">High-Tensile Steel</div>
-                </div>
-                <div>
-                  <div className="text-sm font-black text-[#3B3A3A] font-mono-specs">
-                    <AnimatedCounter end={55} suffix="T+ Max" />
-                  </div>
-                  <div className="text-[11px] text-[#736F6A]">Payload Capacity</div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Hero Image (Brochure Offset Accent Frame Design - Scaled Up & Minimal Margins) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              className="lg:col-span-6 flex items-center justify-center p-1 sm:p-2"
-            >
-              <div className="relative w-full group cursor-pointer">
-                {/* 1. Offset Brand Orange (#F68722) Backdrop Frame from Brochure */}
-                <div className="absolute inset-0 bg-[#F68722] rounded-3xl translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300 -z-10" />
-
-                {/* 2. Main Foreground Image Container with minimal padding and scaled up trailer */}
-                <div className="relative w-full bg-white rounded-3xl p-2 sm:p-3 border-2 border-[#EFE8DF] overflow-hidden group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 flex items-center justify-center min-h-[340px] sm:min-h-[420px]">
-                  <img
-                    src={COMPANY_INFO.heroImage}
-                    alt="Sameer Commercial Trailer — Engineered Heavy Transport"
-                    className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain rounded-2xl scale-[1.06] sm:scale-[1.10] group-hover:scale-[1.14] transition-transform duration-500"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-          </div>
-        </div>
-      </section>
+      {/* 1. INTERACTIVE 3D SCROLL HERO SHOWCASE */}
+      <HeroScroll3DShowcase />
 
       {/* 2. FEATURED PRODUCTS ("WHAT WE BUILD") */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">
@@ -226,9 +136,6 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
-
-      {/* 2.5. SCROLL-DRIVEN 3D CINEMATIC TRAILER ROTATION SHOWCASE */}
-      <TrailerScrollStoryEngine />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

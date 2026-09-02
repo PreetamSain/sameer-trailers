@@ -71,11 +71,9 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
   // Exact Heron AI Ink Mask curve coordinates (scaling from top to bottom)
-  // When p = 0: y = -160 (mask is above the card, 0% orange visible)
-  // When p = 1: y = 1150 (mask covers the whole card, 100% orange visible)
-  const y = -160 + effectiveProgress * 1310;
-  const curve = 140;
-  const pathD = `M -100 -100 L 1100 -100 L 1100 ${y} Q 500 ${y + curve} -100 ${y} Z`;
+  // When p = 0: y = -350 (particles and wave are fully above card, 0% orange visible)
+  // When p = 1: y = 1200 (particles and wave have fully passed bottom, 100% orange visible)
+  const y = -350 + effectiveProgress * 1550;
 
   // White text layer clip-path to match top-to-bottom fill
   const bottomInset = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
@@ -125,62 +123,72 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. EXACT HERON AI INK DISPLACEMENT MASK LAYER */}
-      {/* Uses feTurbulence + feDisplacementMap + feGaussianBlur + feComponentTransfer */}
+      {/* 2. EXACT HERON AI INK DISPLACEMENT MASK LAYER (LARGE PARTICLES) */}
+      {/* Scale increased to 240 + Lower Frequency (0.02) + Splash Droplets */}
       {/* ======================================================== */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none z-10"
+        className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
         viewBox="0 0 1000 1000"
         preserveAspectRatio="none"
       >
         <defs>
           <filter
             id={filterId}
-            x="-20%"
-            y="-20%"
-            width="140%"
-            height="140%"
+            x="-40%"
+            y="-40%"
+            width="180%"
+            height="180%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Exact Heron AI Displacement Filter Settings */}
+            {/* Bold Heron AI Style Displacement Filter */}
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.045 0.055"
+              baseFrequency="0.020 0.026"
               numOctaves={4}
-              seed={5}
+              seed={7}
               result="noise"
             />
             <feDisplacementMap
               in="SourceGraphic"
               in2="noise"
-              scale={80}
+              scale={240}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={1.8}
+              stdDeviation={2.2}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+              <feFuncA type="linear" slope={2.8} intercept={-0.8} />
             </feComponentTransfer>
           </filter>
 
           <mask id={maskId} maskContentUnits="userSpaceOnUse">
-            <path
-              fill="white"
-              style={{ filter: `url(#${filterId})` }}
-              d={pathD}
-            />
+            <g style={{ filter: `url(#${filterId})` }}>
+              {/* Deep Parabolic Wave */}
+              <path
+                fill="white"
+                d={`M -200 -200 L 1200 -200 L 1200 ${y} Q 500 ${y + 260} -200 ${y} Z`}
+              />
+              {/* Large Organic Particle Splatter Droplets */}
+              <circle cx="220" cy={y + 170} r="45" fill="white" />
+              <circle cx="780" cy={y + 180} r="50" fill="white" />
+              <circle cx="500" cy={y + 280} r="42" fill="white" />
+              <circle cx="360" cy={y + 220} r="35" fill="white" />
+              <circle cx="640" cy={y + 230} r="38" fill="white" />
+              <circle cx="120" cy={y + 130} r="30" fill="white" />
+              <circle cx="880" cy={y + 140} r="32" fill="white" />
+            </g>
           </mask>
         </defs>
 
-        {/* Solid Brand Orange rectangle revealed by the ink mask */}
+        {/* Solid Brand Orange rectangle revealed by the large particle ink mask */}
         <rect
           width="1000"
           height="1000"

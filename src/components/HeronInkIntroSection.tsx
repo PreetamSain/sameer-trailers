@@ -89,18 +89,18 @@ export const HeronInkIntroSection: React.FC = () => {
                   className="w-full h-full overflow-visible"
                 >
                   <defs>
-                    {/* Exact Heron AI Displacement Filter */}
+                    {/* Exact Heron AI Displacement Filter with Bold Particle Scale */}
                     <filter
                       id="sharedDisplacementFilter_showcase"
-                      x="-20%"
-                      y="-20%"
-                      width="140%"
-                      height="140%"
+                      x="-30%"
+                      y="-30%"
+                      width="160%"
+                      height="160%"
                       filterUnits="userSpaceOnUse"
                     >
                       <feTurbulence
                         type="fractalNoise"
-                        baseFrequency="0.045 0.055"
+                        baseFrequency="0.022 0.028"
                         numOctaves={4}
                         seed={5}
                         result="noise"
@@ -108,34 +108,41 @@ export const HeronInkIntroSection: React.FC = () => {
                       <feDisplacementMap
                         in="SourceGraphic"
                         in2="noise"
-                        scale={100}
+                        scale={180}
                         xChannelSelector="R"
                         yChannelSelector="G"
                         result="displaced"
                       />
                       <feGaussianBlur
                         in="displaced"
-                        stdDeviation={1.8}
+                        stdDeviation={2.0}
                         result="blurred"
                       />
                       <feComponentTransfer
                         in="blurred"
                         result="contrast"
                       >
-                        <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+                        <feFuncA type="linear" slope={2.6} intercept={-0.7} />
                       </feComponentTransfer>
                     </filter>
 
-                    {/* Ink Mask */}
+                    {/* Ink Mask with Detached Splash Droplets */}
                     <mask
                       id="inkCircleMask_showcase"
                       maskContentUnits="userSpaceOnUse"
                     >
-                      <path
-                        fill="white"
-                        style={{ filter: 'url(#sharedDisplacementFilter_showcase)' }}
-                        d={maskPathD}
-                      />
+                      <g style={{ filter: 'url(#sharedDisplacementFilter_showcase)' }}>
+                        <path
+                          fill="white"
+                          d={maskPathD}
+                        />
+                        {/* Flying ink particle droplets */}
+                        <circle cx="250" cy={y + 120} r="35" fill="white" />
+                        <circle cx="750" cy={y + 130} r="40" fill="white" />
+                        <circle cx="500" cy={y + 200} r="32" fill="white" />
+                        <circle cx="380" cy={y + 160} r="25" fill="white" />
+                        <circle cx="620" cy={y + 170} r="28" fill="white" />
+                      </g>
                     </mask>
                   </defs>
 

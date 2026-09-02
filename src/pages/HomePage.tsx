@@ -30,6 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
+import { NoiseFillCard } from '../components/NoiseFillCard';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -249,81 +250,37 @@ export const HomePage: React.FC = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.4, delay: 0.05 }}
-              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-black text-[#F68722] font-mono-specs block">700 MPa YIELD</span>
-                <h3 className="text-base font-black text-[#3B3A3A] font-heading mt-1">DOMEX 700 High-Yield Steel</h3>
-                <p className="text-xs text-[#736F6A] mt-2 leading-relaxed">
-                  Ultra-high yield strength steel prevents longitudinal beam bending, sag, and stress fatigue under continuous heavy loads.
-                </p>
-              </div>
-            </motion.div>
+            <NoiseFillCard
+              icon={<ShieldCheck className="w-6 h-6" />}
+              tag="700 MPa YIELD"
+              title="DOMEX 700 High-Yield Steel"
+              description="Ultra-high yield strength steel prevents longitudinal beam bending, sag, and stress fatigue under continuous heavy loads."
+              baseBg="bg-[#FFFBF7]"
+            />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
-                <Scale className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-black text-[#F68722] font-mono-specs block">-1,800 KG TARE</span>
-                <h3 className="text-base font-black text-[#3B3A3A] font-heading mt-1">Optimized Dead Weight</h3>
-                <p className="text-xs text-[#736F6A] mt-2 leading-relaxed">
-                  Lighter tare dead-weight enables fleet transporters to legally carry up to 1.8 metric tons more revenue freight per trip.
-                </p>
-              </div>
-            </motion.div>
+            <NoiseFillCard
+              icon={<Scale className="w-6 h-6" />}
+              tag="-1,800 KG TARE"
+              title="Optimized Dead Weight"
+              description="Lighter tare dead-weight enables fleet transporters to legally carry up to 1.8 metric tons more revenue freight per trip."
+              baseBg="bg-[#FFFBF7]"
+            />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
-                <Flame className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-black text-[#F68722] font-mono-specs block">100% PENETRATION</span>
-                <h3 className="text-base font-black text-[#3B3A3A] font-heading mt-1">Robotic Submerged Arc Welding</h3>
-                <p className="text-xs text-[#736F6A] mt-2 leading-relaxed">
-                  Automatic double-sided continuous submerged arc welding (SAW) on main I-beams eliminates human welding defects.
-                </p>
-              </div>
-            </motion.div>
+            <NoiseFillCard
+              icon={<Flame className="w-6 h-6" />}
+              tag="100% PENETRATION"
+              title="Robotic Submerged Arc Welding"
+              description="Automatic double-sided continuous submerged arc welding (SAW) on main I-beams eliminates human welding defects."
+              baseBg="bg-[#FFFBF7]"
+            />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="bg-[#FFFBF7] p-6 rounded-3xl border border-[#EFE8DF] space-y-4 hover:shadow-xl hover:border-[#F68722]/30 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-black text-[#F68722] font-mono-specs block">SA 2.5 SURFACE</span>
-                <h3 className="text-base font-black text-[#3B3A3A] font-heading mt-1">Shot Blasting & 2K PU Paint</h3>
-                <p className="text-xs text-[#736F6A] mt-2 leading-relaxed">
-                  Steel shot-blasted to white metal followed by zinc-rich primer and heavy 2K polyurethane paint for 10+ year corrosion shield.
-                </p>
-              </div>
-            </motion.div>
+            <NoiseFillCard
+              icon={<Sparkles className="w-6 h-6" />}
+              tag="SA 2.5 SURFACE"
+              title="Shot Blasting & 2K PU Paint"
+              description="Steel shot-blasted to white metal followed by zinc-rich primer and heavy 2K polyurethane paint for 10+ year corrosion shield."
+              baseBg="bg-[#FFFBF7]"
+            />
           </div>
 
         </div>
@@ -396,30 +353,21 @@ export const HomePage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {INDUSTRY_SECTORS.map((sec, idx) => (
-              <motion.div
+              <NoiseFillCard
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "100px" }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="bg-white p-6 rounded-3xl border border-[#EFE8DF] shadow-sm hover:shadow-xl hover:border-[#F68722]/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#F68722]/10 flex items-center justify-center text-[#F68722]">
-                    {idx === 0 && <Pickaxe className="w-5 h-5" />}
-                    {idx === 1 && <Building2 className="w-5 h-5" />}
-                    {idx === 2 && <Ship className="w-5 h-5" />}
-                    {idx === 3 && <Factory className="w-5 h-5" />}
-                  </div>
-                  <h3 className="text-base font-black text-[#3B3A3A] font-heading">{sec.title}</h3>
-                  <p className="text-xs text-[#736F6A] leading-relaxed">{sec.desc}</p>
-                </div>
-
-                <div className="pt-3 border-t border-[#EFE8DF]">
-                  <span className="text-[10px] font-bold text-[#736F6A] uppercase block">Typical Cargo:</span>
-                  <span className="text-xs font-bold text-[#3B3A3A] mt-0.5 block">{sec.cargo}</span>
-                </div>
-              </motion.div>
+                icon={
+                  idx === 0 ? <Pickaxe className="w-6 h-6" /> :
+                  idx === 1 ? <Building2 className="w-6 h-6" /> :
+                  idx === 2 ? <Ship className="w-6 h-6" /> :
+                  <Factory className="w-6 h-6" />
+                }
+                tag="KEY LOGISTICS VERTICAL"
+                title={sec.title}
+                description={sec.desc}
+                footerLabel="Typical Cargo:"
+                footerValue={sec.cargo}
+                baseBg="bg-white"
+              />
             ))}
           </div>
 

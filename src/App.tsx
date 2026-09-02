@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Lenis from 'lenis';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { CustomSquareCursor } from './components/CustomSquareCursor';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
@@ -47,6 +48,7 @@ export function App() {
   return (
     <Router>
       <ScrollToTop />
+      <CustomSquareCursor />
       <div className="flex flex-col min-h-screen bg-[#FFFBF7] text-[#3B3A3A]">
         {/* Clean Sticky Header */}
         <Header />

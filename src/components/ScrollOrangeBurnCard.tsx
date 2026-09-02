@@ -66,14 +66,14 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // Effective progress: hover ignites the card to 100%
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
-  // Inset calculation: clips from the top down to (1 - effectiveProgress)
-  // When p = 0: inset is 100% from top (0% orange visible)
-  // When p = 0.5: inset is 50% from top (bottom 50% is solid orange)
-  // When p = 1: inset is 0% from top (100% full orange)
-  const clipPercentage = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
+  // Inset calculation: fills from TOP to BOTTOM (upper se niche)
+  // When p = 0: bottom inset is 100% (0% orange visible)
+  // When p = 0.5: bottom inset is 50% (top 50% is solid orange)
+  // When p = 1: bottom inset is 0% (100% full orange)
+  const bottomInset = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
 
-  // Position of the rising vector flame edge
-  const edgeTop = `${clipPercentage}%`;
+  // Position of the downward advancing vector flame edge
+  const edgeTop = `${Math.max(0, Math.min(100, effectiveProgress * 100))}%`;
   const showEdge = effectiveProgress > 0.03 && effectiveProgress < 0.97;
 
   return (
@@ -127,8 +127,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       <div
         className="absolute inset-0 bg-[#F68722] pointer-events-none z-10 transition-[clip-path] duration-150 ease-out"
         style={{
-          clipPath: `inset(${clipPercentage}% 0% 0% 0%)`,
-          WebkitClipPath: `inset(${clipPercentage}% 0% 0% 0%)`
+          clipPath: `inset(0% 0% ${bottomInset}% 0%)`,
+          WebkitClipPath: `inset(0% 0% ${bottomInset}% 0%)`
         }}
       >
         {/* Subtle Paper Grain Texture */}
@@ -177,7 +177,7 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
 
       {/* ======================================================== */}
       {/* 3. ORGANIC VECTOR FLAME / BURN BOUNDARY LINE */}
-      {/* Rides right on the rising edge with glowing vector wave & embers */}
+      {/* Rides right on the downward advancing edge with glowing vector wave & embers */}
       {/* ======================================================== */}
       {showEdge && (
         <div
@@ -190,21 +190,21 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             preserveAspectRatio="none"
             fill="none"
           >
-            {/* Wavy Vector Ember Glow */}
+            {/* Wavy Vector Ember Glow pointing downward */}
             <path
-              d="M 0 12 Q 75 0, 150 12 T 300 12 L 300 24 L 0 24 Z"
+              d="M 0 0 L 0 12 Q 75 22, 150 12 T 300 12 L 300 0 Z"
               fill="#F68722"
             />
             {/* Glowing Golden Vector Line */}
             <path
-              d="M 0 12 Q 75 0, 150 12 T 300 12"
+              d="M 0 12 Q 75 22, 150 12 T 300 12"
               stroke="#FFA000"
               strokeWidth="2"
             />
-            {/* Tiny Floating Vector Embers (Paper burn sparks) */}
-            <circle cx="60" cy="4" r="2" fill="#FFD54F" />
-            <circle cx="180" cy="2" r="1.5" fill="#FFA726" />
-            <circle cx="240" cy="6" r="2" fill="#FFD54F" />
+            {/* Tiny Floating Vector Embers */}
+            <circle cx="60" cy="18" r="2" fill="#FFD54F" />
+            <circle cx="180" cy="19" r="1.5" fill="#FFA726" />
+            <circle cx="240" cy="17" r="2" fill="#FFD54F" />
           </svg>
         </div>
       )}

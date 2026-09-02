@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useId } from 'react';
 
 interface ScrollOrangeBurnCardProps {
   icon: React.ReactNode;
@@ -22,6 +22,10 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const rawId = useId();
+  const cleanId = rawId.replace(/[^a-zA-Z0-9]/g, '');
+  const filterId = `sharedDisplacementFilter_${cleanId}`;
+  const maskId = `inkCircleMask_${cleanId}`;
 
   // Directly track card position in viewport for 100% guaranteed reliability
   useEffect(() => {
@@ -66,15 +70,15 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // Effective progress: hover ignites the card to 100%
   const effectiveProgress = isHovered ? 1 : scrollProgress;
 
-  // Inset calculation: fills from TOP to BOTTOM (upper se niche)
-  // When p = 0: bottom inset is 100% (0% orange visible)
-  // When p = 0.5: bottom inset is 50% (top 50% is solid orange)
-  // When p = 1: bottom inset is 0% (100% full orange)
-  const bottomInset = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
+  // Exact Heron AI Ink Mask curve coordinates (scaling from top to bottom)
+  // When p = 0: y = -160 (mask is above the card, 0% orange visible)
+  // When p = 1: y = 1150 (mask covers the whole card, 100% orange visible)
+  const y = -160 + effectiveProgress * 1310;
+  const curve = 140;
+  const pathD = `M -100 -100 L 1100 -100 L 1100 ${y} Q 500 ${y + curve} -100 ${y} Z`;
 
-  // Position of the downward advancing vector flame edge
-  const edgeTop = `${Math.max(0, Math.min(100, effectiveProgress * 100))}%`;
-  const showEdge = effectiveProgress > 0.03 && effectiveProgress < 0.97;
+  // White text layer clip-path to match top-to-bottom fill
+  const bottomInset = Math.max(0, Math.min(100, (1 - effectiveProgress) * 100));
 
   return (
     <div
@@ -121,26 +125,82 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 2. ORANGE OVERLAY LAYER (Rises from bottom to top on scroll) */}
-      {/* 100% reliable hardware-accelerated clipPath */}
+      {/* 2. EXACT HERON AI INK DISPLACEMENT MASK LAYER */}
+      {/* Uses feTurbulence + feDisplacementMap + feGaussianBlur + feComponentTransfer */}
+      {/* ======================================================== */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none z-10"
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <filter
+            id={filterId}
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+            filterUnits="userSpaceOnUse"
+          >
+            {/* Exact Heron AI Displacement Filter Settings */}
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.045 0.055"
+              numOctaves={4}
+              seed={5}
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale={80}
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displaced"
+            />
+            <feGaussianBlur
+              in="displaced"
+              stdDeviation={1.8}
+              result="blurred"
+            />
+            <feComponentTransfer
+              in="blurred"
+              result="contrast"
+            >
+              <feFuncA type="linear" slope={2.2} intercept={-0.6} />
+            </feComponentTransfer>
+          </filter>
+
+          <mask id={maskId} maskContentUnits="userSpaceOnUse">
+            <path
+              fill="white"
+              style={{ filter: `url(#${filterId})` }}
+              d={pathD}
+            />
+          </mask>
+        </defs>
+
+        {/* Solid Brand Orange rectangle revealed by the ink mask */}
+        <rect
+          width="1000"
+          height="1000"
+          fill="#F68722"
+          mask={`url(#${maskId})`}
+        />
+      </svg>
+
+      {/* ======================================================== */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER */}
+      {/* Synchronized with the advancing ink layer */}
       {/* ======================================================== */}
       <div
-        className="absolute inset-0 bg-[#F68722] pointer-events-none z-10 transition-[clip-path] duration-150 ease-out"
+        className="absolute inset-0 pointer-events-none z-20 text-white transition-[clip-path] duration-150 ease-out"
         style={{
           clipPath: `inset(0% 0% ${bottomInset}% 0%)`,
           WebkitClipPath: `inset(0% 0% ${bottomInset}% 0%)`
         }}
       >
-        {/* Subtle Paper Grain Texture */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")`
-          }}
-        />
-
-        {/* Duplicate Content in Pure White Text for 100% Crisp Contrast */}
-        <div className="p-6 space-y-4 flex flex-col justify-between h-full text-white">
+        <div className="p-6 space-y-4 flex flex-col justify-between h-full">
           <div className="space-y-4">
             {/* White Translucent Icon Pill */}
             <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
@@ -174,40 +234,6 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
           )}
         </div>
       </div>
-
-      {/* ======================================================== */}
-      {/* 3. ORGANIC VECTOR FLAME / BURN BOUNDARY LINE */}
-      {/* Rides right on the downward advancing edge with glowing vector wave & embers */}
-      {/* ======================================================== */}
-      {showEdge && (
-        <div
-          className="absolute inset-x-0 h-8 pointer-events-none z-20 -translate-y-1/2 overflow-visible"
-          style={{ top: edgeTop }}
-        >
-          <svg
-            className="w-full h-full overflow-visible"
-            viewBox="0 0 300 24"
-            preserveAspectRatio="none"
-            fill="none"
-          >
-            {/* Wavy Vector Ember Glow pointing downward */}
-            <path
-              d="M 0 0 L 0 12 Q 75 22, 150 12 T 300 12 L 300 0 Z"
-              fill="#F68722"
-            />
-            {/* Glowing Golden Vector Line */}
-            <path
-              d="M 0 12 Q 75 22, 150 12 T 300 12"
-              stroke="#FFA000"
-              strokeWidth="2"
-            />
-            {/* Tiny Floating Vector Embers */}
-            <circle cx="60" cy="18" r="2" fill="#FFD54F" />
-            <circle cx="180" cy="19" r="1.5" fill="#FFA726" />
-            <circle cx="240" cy="17" r="2" fill="#FFD54F" />
-          </svg>
-        </div>
-      )}
 
     </div>
   );

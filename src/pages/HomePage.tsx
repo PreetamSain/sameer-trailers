@@ -31,6 +31,7 @@ import {
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
 import { ScrollOrangeBurnCard } from '../components/ScrollOrangeBurnCard';
+import { HeronInkIntroSection } from '../components/HeronInkIntroSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -373,6 +374,9 @@ export const HomePage: React.FC = () => {
 
         </div>
       </section>
+
+      {/* 5.5 HERON AI INSPIRED INK-MASK DISSOLVE SHOWCASE */}
+      <HeronInkIntroSection />
 
       {/* 6. "STRENGTH THAT SETS US APART" */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

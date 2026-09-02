@@ -30,7 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
-import { WeighbridgeTelemetryShowcase } from '../components/WeighbridgeTelemetryShowcase';
+import { ScrollTransitHighwayShowcase } from '../components/ScrollTransitHighwayShowcase';
 import { HeroScroll3DShowcase } from '../components/HeroScroll3DShowcase';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -228,8 +228,8 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2.5. INTELLIGENT ON-SITE WEIGHBRIDGE & TELEMETRY SHOWCASE */}
-      <WeighbridgeTelemetryShowcase />
+      {/* 2.5. SCROLL-DRIVEN RIGHT TO LEFT HIGHWAY TRANSIT EXPERIENCE */}
+      <ScrollTransitHighwayShowcase />
 
       {/* 3. ENGINEERING & METALLURGY EXCELLENCE */}
       <section className="py-16 md:py-24 bg-white border-y border-[#EFE8DF]">

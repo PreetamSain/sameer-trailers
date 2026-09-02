@@ -257,32 +257,32 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       </svg>
 
       {/* ======================================================== */}
-      {/* 3. PURE WHITE TEXT OVERLAY LAYER (SOFT FEATHERED REVEAL) */}
+      {/* 3. PURE WHITE TEXT OVERLAY LAYER (100% GUARANTEED REVEAL) */}
       {/* ======================================================== */}
       <div
-        className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-200 ease-out"
+        className="absolute inset-0 pointer-events-none z-20 text-white transition-opacity duration-150 ease-out"
         style={{
-          maskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 15)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 22)}%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,1) ${Math.max(0, textRevealPos - 15)}%, rgba(0,0,0,0) ${Math.min(100, textRevealPos + 22)}%)`,
-          opacity: effectiveProgress > 0.02 ? 1 : 0
+          opacity: effectiveProgress > 0.05 ? Math.min(1, (effectiveProgress - 0.05) / 0.25) : 0,
+          clipPath: `inset(0% 0% ${Math.max(0, (1 - Math.min(1, effectiveProgress * 1.35)) * 100)}% 0%)`,
+          WebkitClipPath: `inset(0% 0% ${Math.max(0, (1 - Math.min(1, effectiveProgress * 1.35)) * 100)}% 0%)`
         }}
       >
         <div className="p-6 space-y-4 flex flex-col justify-between h-full">
           <div className="space-y-4">
             {/* White Translucent Icon Pill */}
-            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white border border-white/25 shadow-xs">
               {icon}
             </div>
 
             {/* Pure White Typography */}
             <div>
-              <span className="text-xs font-black text-white/90 font-mono-specs block">
+              <span className="text-xs font-black text-white font-mono-specs block drop-shadow-xs">
                 {tag}
               </span>
-              <h3 className="text-base font-black text-white font-heading mt-1 leading-snug">
+              <h3 className="text-base font-black text-white font-heading mt-1 leading-snug drop-shadow-xs">
                 {title}
               </h3>
-              <p className="text-xs text-white/90 mt-2 leading-relaxed">
+              <p className="text-xs text-white/95 mt-2 leading-relaxed font-medium">
                 {description}
               </p>
             </div>
@@ -290,8 +290,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
 
           {/* White Footer Metric */}
           {footerLabel && (
-            <div className="pt-4 border-t border-white/25 flex items-center justify-between">
-              <span className="text-[10px] font-bold text-white/80 uppercase font-mono-specs block">
+            <div className="pt-4 border-t border-white/30 flex items-center justify-between">
+              <span className="text-[10px] font-bold text-white/90 uppercase font-mono-specs block">
                 {footerLabel}
               </span>
               <span className="text-xs font-black text-white block">

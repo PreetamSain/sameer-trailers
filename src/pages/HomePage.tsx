@@ -31,7 +31,6 @@ import {
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
 import { ScrollOrangeBurnCard } from '../components/ScrollOrangeBurnCard';
-import { HeronInkIntroSection } from '../components/HeronInkIntroSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
@@ -155,10 +154,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. HERON AI ARCHITECTURAL INK-MASK INTRO SECTION */}
-      <HeronInkIntroSection />
-
-      {/* 3. FEATURED PRODUCTS ("WHAT WE BUILD") */}
+      {/* 2. FEATURED PRODUCTS ("WHAT WE BUILD") */}
       <section className="py-16 md:py-24 bg-[#FFFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           

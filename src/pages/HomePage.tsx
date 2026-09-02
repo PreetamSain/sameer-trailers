@@ -30,7 +30,7 @@ import {
 } from '../data/trailers';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { HeroParticles } from '../components/HeroParticles';
-import { NoiseFillCard } from '../components/NoiseFillCard';
+import { VectorBurnCard } from '../components/VectorBurnCard';
 import { HeronShowcaseSection } from '../components/HeronShowcaseSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -251,7 +251,7 @@ export const HomePage: React.FC = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <NoiseFillCard
+            <VectorBurnCard
               icon={<ShieldCheck className="w-6 h-6" />}
               tag="700 MPa YIELD"
               title="DOMEX 700 High-Yield Steel"
@@ -259,7 +259,7 @@ export const HomePage: React.FC = () => {
               baseBg="bg-[#FFFBF7]"
             />
 
-            <NoiseFillCard
+            <VectorBurnCard
               icon={<Scale className="w-6 h-6" />}
               tag="-1,800 KG TARE"
               title="Optimized Dead Weight"
@@ -267,7 +267,7 @@ export const HomePage: React.FC = () => {
               baseBg="bg-[#FFFBF7]"
             />
 
-            <NoiseFillCard
+            <VectorBurnCard
               icon={<Flame className="w-6 h-6" />}
               tag="100% PENETRATION"
               title="Robotic Submerged Arc Welding"
@@ -275,7 +275,7 @@ export const HomePage: React.FC = () => {
               baseBg="bg-[#FFFBF7]"
             />
 
-            <NoiseFillCard
+            <VectorBurnCard
               icon={<Sparkles className="w-6 h-6" />}
               tag="SA 2.5 SURFACE"
               title="Shot Blasting & 2K PU Paint"
@@ -314,7 +314,7 @@ export const HomePage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {INDUSTRY_SECTORS.map((sec, idx) => (
-              <NoiseFillCard
+              <VectorBurnCard
                 key={idx}
                 icon={
                   idx === 0 ? <Pickaxe className="w-6 h-6" /> :

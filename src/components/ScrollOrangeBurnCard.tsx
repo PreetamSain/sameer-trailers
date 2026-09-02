@@ -101,42 +101,42 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
   // ========================================================
   const p = Math.max(0, Math.min(1, effectiveProgress));
 
-  // The base continuous mass accumulating from top to bottom
-  const ceilingY = -60 + p * (dims.h + 120);
-  const baseCeilingD = `M -60 -60 L ${dims.w + 60} -60 L ${dims.w + 60} ${ceilingY.toFixed(1)} L -60 ${ceilingY.toFixed(1)} Z`;
+  // The base continuous mass accumulating from top to bottom (EXACT 5ae3c37 parameters)
+  const ceilingY = -140 + p * 1240;
+  const baseCeilingD = `M -100 -200 L 1100 -200 L 1100 ${ceilingY.toFixed(1)} L -100 ${ceilingY.toFixed(1)} Z`;
 
-  // Fixed constellation of in-place blooming cloud nodes (proportional to card dimensions)
+  // Fixed constellation of in-place blooming cloud nodes (EXACT 5ae3c37 parameters)
   // Seeded per card so every card has its own custom, organic cloud pattern!
   const s = cardSeed * 13;
   const cardNodes = [
     // Top Band (0% - 25% scroll)
-    { u: 0.22 + (((s * 7) % 30) - 15) / 100, v: 0.12, rRatio: 0.28, startP: 0.00, fullP: 0.18 },
-    { u: 0.50 + (((s * 3) % 30) - 15) / 100, v: 0.09, rRatio: 0.32, startP: 0.02, fullP: 0.20 },
-    { u: 0.78 + (((s * 5) % 30) - 15) / 100, v: 0.14, rRatio: 0.28, startP: 0.04, fullP: 0.22 },
-    { u: 0.38 + (((s * 9) % 30) - 15) / 100, v: 0.22, rRatio: 0.34, startP: 0.08, fullP: 0.26 },
-    { u: 0.64 + (((s * 11) % 30) - 15) / 100, v: 0.24, rRatio: 0.30, startP: 0.10, fullP: 0.28 },
+    { cx: 220 + ((s * 7) % 60) - 30, cy: 120, maxR: 150, startP: 0.00, fullP: 0.18 },
+    { cx: 500 + ((s * 3) % 60) - 30, cy: 90,  maxR: 160, startP: 0.02, fullP: 0.20 },
+    { cx: 780 + ((s * 5) % 60) - 30, cy: 140, maxR: 150, startP: 0.04, fullP: 0.22 },
+    { cx: 380 + ((s * 9) % 60) - 30, cy: 220, maxR: 170, startP: 0.08, fullP: 0.26 },
+    { cx: 640 + ((s * 11) % 60) - 30, cy: 240, maxR: 160, startP: 0.10, fullP: 0.28 },
 
     // Upper-Mid Band (20% - 52% scroll)
-    { u: 0.16 + (((s * 4) % 30) - 15) / 100, v: 0.38, rRatio: 0.32, startP: 0.18, fullP: 0.38 },
-    { u: 0.84 + (((s * 8) % 30) - 15) / 100, v: 0.36, rRatio: 0.29, startP: 0.20, fullP: 0.40 },
-    { u: 0.46 + (((s * 6) % 30) - 15) / 100, v: 0.41, rRatio: 0.36, startP: 0.24, fullP: 0.44 },
-    { u: 0.68 + (((s * 2) % 30) - 15) / 100, v: 0.46, rRatio: 0.33, startP: 0.28, fullP: 0.48 },
-    { u: 0.29 + (((s * 13) % 30) - 15) / 100, v: 0.49, rRatio: 0.32, startP: 0.32, fullP: 0.52 },
+    { cx: 160 + ((s * 4) % 60) - 30, cy: 380, maxR: 160, startP: 0.18, fullP: 0.38 },
+    { cx: 840 + ((s * 8) % 60) - 30, cy: 360, maxR: 150, startP: 0.20, fullP: 0.40 },
+    { cx: 460 + ((s * 6) % 60) - 30, cy: 410, maxR: 180, startP: 0.24, fullP: 0.44 },
+    { cx: 680 + ((s * 2) % 60) - 30, cy: 460, maxR: 170, startP: 0.28, fullP: 0.48 },
+    { cx: 290 + ((s * 13) % 60) - 30, cy: 490, maxR: 165, startP: 0.32, fullP: 0.52 },
 
     // Lower-Mid Band (42% - 75% scroll)
-    { u: 0.14 + (((s * 5) % 30) - 15) / 100, v: 0.62, rRatio: 0.30, startP: 0.42, fullP: 0.62 },
-    { u: 0.52 + (((s * 7) % 30) - 15) / 100, v: 0.61, rRatio: 0.36, startP: 0.46, fullP: 0.66 },
-    { u: 0.79 + (((s * 9) % 30) - 15) / 100, v: 0.64, rRatio: 0.34, startP: 0.50, fullP: 0.70 },
-    { u: 0.35 + (((s * 3) % 30) - 15) / 100, v: 0.69, rRatio: 0.33, startP: 0.54, fullP: 0.74 },
-    { u: 0.66 + (((s * 11) % 30) - 15) / 100, v: 0.72, rRatio: 0.32, startP: 0.58, fullP: 0.78 },
+    { cx: 140 + ((s * 5) % 60) - 30, cy: 620, maxR: 155, startP: 0.42, fullP: 0.62 },
+    { cx: 520 + ((s * 7) % 60) - 30, cy: 610, maxR: 185, startP: 0.46, fullP: 0.66 },
+    { cx: 790 + ((s * 9) % 60) - 30, cy: 640, maxR: 175, startP: 0.50, fullP: 0.70 },
+    { cx: 350 + ((s * 3) % 60) - 30, cy: 690, maxR: 170, startP: 0.54, fullP: 0.74 },
+    { cx: 660 + ((s * 11) % 60) - 30, cy: 720, maxR: 165, startP: 0.58, fullP: 0.78 },
 
     // Bottom Band (65% - 100% scroll)
-    { u: 0.20 + (((s * 2) % 30) - 15) / 100, v: 0.84, rRatio: 0.33, startP: 0.64, fullP: 0.84 },
-    { u: 0.48 + (((s * 6) % 30) - 15) / 100, v: 0.83, rRatio: 0.37, startP: 0.68, fullP: 0.88 },
-    { u: 0.78 + (((s * 4) % 30) - 15) / 100, v: 0.86, rRatio: 0.34, startP: 0.72, fullP: 0.92 },
-    { u: 0.36 + (((s * 8) % 30) - 15) / 100, v: 0.94, rRatio: 0.35, startP: 0.76, fullP: 0.96 },
-    { u: 0.62 + (((s * 10) % 30) - 15) / 100, v: 0.95, rRatio: 0.36, startP: 0.78, fullP: 0.98 },
-    { u: 0.50, v: 1.02, rRatio: 0.40, startP: 0.80, fullP: 1.00 }
+    { cx: 200 + ((s * 2) % 60) - 30, cy: 840, maxR: 170, startP: 0.64, fullP: 0.84 },
+    { cx: 480 + ((s * 6) % 60) - 30, cy: 830, maxR: 190, startP: 0.68, fullP: 0.88 },
+    { cx: 780 + ((s * 4) % 60) - 30, cy: 860, maxR: 175, startP: 0.72, fullP: 0.92 },
+    { cx: 360 + ((s * 8) % 60) - 30, cy: 940, maxR: 180, startP: 0.76, fullP: 0.96 },
+    { cx: 620 + ((s * 10) % 60) - 30, cy: 950, maxR: 185, startP: 0.78, fullP: 0.98 },
+    { cx: 500, cy: 1020, maxR: 200, startP: 0.80, fullP: 1.00 }
   ];
 
   // Calculate in-place expansion for each fixed node
@@ -145,11 +145,14 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
     const localT = Math.min(1, (p - node.startP) / (node.fullP - node.startP));
     const scale = localT * (2 - localT);
     return {
-      cx: node.u * dims.w,
-      cy: node.v * dims.h,
-      r: node.rRatio * dims.w * scale
+      cx: node.cx,
+      cy: node.cy,
+      r: node.maxR * scale
     };
   }).filter((n): n is { cx: number; cy: number; r: number } => n !== null);
+
+  const scaleX = dims.w > 0 ? 1000 / dims.w : 2.94;
+  const scaleY = dims.h > 0 ? 1000 / dims.h : 2.63;
 
   return (
     <div
@@ -202,7 +205,8 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
       {/* ======================================================== */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-hidden"
-        viewBox={`0 0 ${dims.w} ${dims.h}`}
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
       >
         <defs>
           <filter
@@ -213,10 +217,10 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             height="170%"
             filterUnits="userSpaceOnUse"
           >
-            {/* Real Soft Puffy Cloud Filter */}
+            {/* Real Soft Puffy Cloud Filter (EXACT 5ae3c37 parameters) */}
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.012 0.016"
+              baseFrequency="0.010 0.014"
               numOctaves={3}
               seed={cardSeed}
               result="cloudNoise"
@@ -224,25 +228,25 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
             <feDisplacementMap
               in="SourceGraphic"
               in2="cloudNoise"
-              scale={45}
+              scale={150}
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
             />
             <feGaussianBlur
               in="displaced"
-              stdDeviation={2.5}
+              stdDeviation={4.2}
               result="blurred"
             />
             <feComponentTransfer
               in="blurred"
               result="contrast"
             >
-              <feFuncA type="linear" slope={2.6} intercept={-0.75} />
+              <feFuncA type="linear" slope={2.8} intercept={-0.75} />
             </feComponentTransfer>
           </filter>
 
-          <mask id={maskId} maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+          <mask id={maskId} maskContentUnits="userSpaceOnUse">
             <g style={{ filter: `url(#${filterId})` }}>
               {/* Continuous ceiling accumulating downwards */}
               <path
@@ -267,15 +271,21 @@ export const ScrollOrangeBurnCard: React.FC<ScrollOrangeBurnCardProps> = ({
         <g mask={`url(#${maskId})`}>
           {/* Solid Brand Orange rectangle */}
           <rect
-            width={dims.w}
-            height={dims.h}
+            width="1000"
+            height="1000"
             fill="#F68722"
           />
 
           {/* Cloned Pure White Typography (Pixel-for-pixel match to base card) */}
-          <foreignObject x="0" y="0" width={dims.w} height={dims.h}>
+          <foreignObject x="0" y="0" width="1000" height="1000">
             <div
-              style={{ width: `${dims.w}px`, height: `${dims.h}px`, boxSizing: 'border-box' }}
+              style={{
+                width: `${dims.w}px`,
+                height: `${dims.h}px`,
+                transform: `scale(${scaleX}, ${scaleY})`,
+                transformOrigin: '0 0',
+                boxSizing: 'border-box'
+              }}
               className="p-6 space-y-4 flex flex-col justify-between h-full text-white select-none"
             >
               <div className="space-y-4">
